@@ -86,40 +86,57 @@
     }
     .master-add svg{width:16px;height:16px}
 
-    /* Inline editor */
-    .editor-panel{
-      display:none;margin-top:8px;border:1px solid var(--line);
-      border-radius:12px;background:var(--panel);
+    /* Dedicated add/edit page */
+    .home-only.hidden{display:none!important}
+    .editor-page{display:none}
+    .editor-page.show{display:block}
+    .page-head{
+      display:flex;align-items:center;gap:10px;margin:2px 0 10px;
     }
-    .editor-panel.show{display:block}
-    .sheet{padding:12px}
-    .sheethead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-    .sheet h2{margin:0;font-size:15px;line-height:1.2}
-    .sheet p{margin:3px 0 0;color:var(--muted);font-size:10px}
-    .field{margin-top:10px}
+    .back-btn{
+      width:36px;height:36px;padding:0;border:1px solid var(--line);border-radius:9px;
+      background:var(--panel);color:#526d69;display:grid;place-items:center;flex:0 0 auto;
+    }
+    .back-btn svg{width:18px;height:18px}
+    .page-head-copy h2{margin:0;font-size:16px;line-height:1.2}
+    .page-head-copy p{margin:2px 0 0;color:var(--muted);font-size:10.5px}
+    .editor-card{
+      border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:12px;
+    }
+    .field{margin-top:11px}
+    .field:first-child{margin-top:0}
     .field label{
       display:block;margin:0 0 5px;color:#667f7b;
       font-size:10px;line-height:1.2;font-weight:800;letter-spacing:.035em;
     }
     .field input{
-      width:100%;min-height:40px;padding:8px 10px;border:1px solid var(--line);
+      width:100%;min-height:42px;padding:9px 10px;border:1px solid var(--line);
       border-radius:8px;outline:none;background:var(--panel-soft);color:var(--text);
       font-size:13px;
     }
     .field input:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(15,156,143,.08)}
-    .category-picker{
-      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;
-      max-height:138px;overflow:auto;padding:1px;-webkit-overflow-scrolling:touch;
+    .category-select{
+      width:100%;min-height:42px;padding:0 11px;border:1px solid var(--line);border-radius:8px;
+      background:var(--panel-soft);color:var(--text);display:flex;align-items:center;justify-content:space-between;
+      font-size:13px;font-weight:650;text-align:left;
     }
-    .category-picker button{
-      min-height:34px;padding:5px;border:1px solid var(--line);border-radius:8px;
-      background:var(--panel-soft);color:#55706b;font-size:10px;font-weight:700;
+    .category-select svg{width:16px;height:16px;color:#6d8480;transition:transform .15s}
+    .category-select.open svg{transform:rotate(180deg)}
+    .category-options{
+      display:none;margin-top:6px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;
     }
-    .category-picker button.active{
-      background:var(--brand-soft);border-color:#63c2b8;color:var(--brand-dark);
+    .category-options.show{display:block}
+    .category-option{
+      width:100%;min-height:38px;padding:8px 10px;border:0;border-bottom:1px solid #e9efee;
+      border-radius:0;background:#fff;color:#4f6965;display:flex;align-items:center;justify-content:space-between;
+      font-size:12px;text-align:left;font-weight:600;
     }
-    .actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}
-    .btn{height:38px;border-radius:8px;border:0;font-size:11.5px;font-weight:750}
+    .category-option:last-child{border-bottom:0}
+    .category-option.active{background:var(--brand-soft);color:var(--brand-dark);font-weight:800}
+    .category-option .check{opacity:0;color:var(--brand)}
+    .category-option.active .check{opacity:1}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:13px}
+    .btn{height:40px;border-radius:8px;border:0;font-size:11.5px;font-weight:750}
     .secondary{background:#f2f6f5;color:#526d69;border:1px solid var(--line)}
     .savebtn{background:var(--brand);color:#fff}
     .danger{
@@ -221,7 +238,7 @@
 </head>
 <body>
   <main class="shell">
-    <section class="hero">
+    <section class="hero home-only">
       <div class="brandline">
         <img class="brand-logo" src="./logo-blessing.svg" alt="Blessing Store" />
         <h1 class="brand-title">Master Data Pelanggan Konter</h1>
@@ -229,7 +246,7 @@
       <p class="hero-sub">Simpan nama dan nomor pelanggan berdasarkan jenis layanan. Cepat dicari, mudah disalin.</p>
     </section>
 
-    <section class="tools">
+    <section class="tools home-only">
       <div class="menu-title">
         <strong>Pilih Layanan</strong>
         <span>Master pelanggan</span>
@@ -260,46 +277,6 @@
         </button>
       </div>
 
-      <section class="editor-panel" id="editor">
-        <form class="sheet" id="editorForm">
-          <div class="sheethead">
-            <div>
-              <h2 id="editorTitle">Tambah Pelanggan</h2>
-              <p>Isi data lalu simpan. Form tetap berada di halaman ini.</p>
-            </div>
-          </div>
-          <div class="field">
-            <label>KATEGORI</label>
-            <input type="hidden" id="editCategory" value="Pulsa" />
-            <div class="category-picker" id="categoryPicker">
-              <button type="button" data-value="Pulsa">Pulsa</button>
-              <button type="button" data-value="Paket Data">Paket Data</button>
-              <button type="button" data-value="Listrik Token">Token PLN</button>
-              <button type="button" data-value="Listrik Bulanan">PLN Bulanan</button>
-              <button type="button" data-value="BPJS">BPJS</button>
-              <button type="button" data-value="DANA">DANA</button>
-              <button type="button" data-value="GoPay">GoPay</button>
-              <button type="button" data-value="OVO">OVO</button>
-              <button type="button" data-value="ShopeePay">ShopeePay</button>
-              <button type="button" data-value="PDAM">PDAM</button>
-              <button type="button" data-value="IndiHome">IndiHome</button>
-            </div>
-          </div>
-          <div class="field">
-            <label>NAMA PELANGGAN</label>
-            <input id="editName" placeholder="Contoh: AHDI" required />
-          </div>
-          <div class="field">
-            <label>NOMOR / ID PELANGGAN</label>
-            <input id="editNumber" inputmode="numeric" placeholder="Masukkan nomor" required />
-          </div>
-          <div class="actions">
-            <button type="button" class="btn secondary" id="cancelBtn">Batal</button>
-            <button type="submit" class="btn savebtn">Simpan</button>
-            <button type="button" class="btn danger" id="deleteBtn">Hapus Data</button>
-          </div>
-        </form>
-      </section>
 
       <div class="search-wrap">
         <label class="search-label" for="search">Cari Pelanggan</label>
@@ -311,17 +288,66 @@
       </div>
     </section>
 
-    <div class="sectionbar">
+    <div class="sectionbar home-only">
       <strong>Daftar Pelanggan</strong>
       <span id="shownCount"></span>
     </div>
 
-    <section id="list" class="list"></section>
-    <div id="empty" class="empty" hidden>
+    <section id="list" class="list home-only"></section>
+    <div id="empty" class="empty home-only" hidden>
       <svg viewBox="0 0 24 24" fill="none"><path d="M9.5 4h5M8 8h8m-9 4h10M8 16h5M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
       <div>Data tidak ditemukan.</div>
     </div>
-    <div class="footnote">Perubahan Tambah / Edit / Hapus tersimpan lokal di HP ini.</div>
+    <div class="footnote home-only">Perubahan Tambah / Edit / Hapus tersimpan lokal di HP ini.</div>
+    <section class="editor-page" id="editor">
+      <div class="page-head">
+        <button type="button" class="back-btn" id="backBtn" aria-label="Kembali">
+          <svg viewBox="0 0 24 24" fill="none"><path d="m15 5-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="page-head-copy">
+          <h2 id="editorTitle">Tambah Pelanggan</h2>
+          <p>Master data pelanggan Blessing Store</p>
+        </div>
+      </div>
+
+      <form class="editor-card" id="editorForm">
+        <div class="field">
+          <label>KATEGORI LAYANAN</label>
+          <input type="hidden" id="editCategory" value="Pulsa" />
+          <button type="button" class="category-select" id="categorySelect">
+            <span id="categorySelectText">Pulsa</span>
+            <svg viewBox="0 0 24 24" fill="none"><path d="m7 9 5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="category-options" id="categoryOptions">
+            <button type="button" class="category-option" data-value="Pulsa"><span>Pulsa</span><span class="check">✓</span></button>
+            <button type="button" class="category-option" data-value="Paket Data"><span>Paket Data</span><span class="check">✓</span></button>
+            <button type="button" class="category-option" data-value="Listrik Token"><span>Token PLN</span><span class="check">✓</span></button>
+            <button type="button" class="category-option" data-value="Listrik Bulanan"><span>PLN Bulanan</span><span class="check">✓</span></button>
+            <button type="button" class="category-option" data-value="BPJS"><span>BPJS</span><span class="check">✓</span></button>
+            <button type="button" class="category-option" data-value="DANA"><span>DANA</span><span class="check">✓</span></button>
+            <button type="button" class="category-option" data-value="GoPay"><span>GoPay</span><span class="check">✓</span></button>
+            <button type="button" class="category-option" data-value="OVO"><span>OVO</span><span class="check">✓</span></button>
+            <button type="button" class="category-option" data-value="ShopeePay"><span>ShopeePay</span><span class="check">✓</span></button>
+            <button type="button" class="category-option" data-value="PDAM"><span>PDAM</span><span class="check">✓</span></button>
+            <button type="button" class="category-option" data-value="IndiHome"><span>IndiHome</span><span class="check">✓</span></button>
+          </div>
+        </div>
+        <div class="field">
+          <label>NAMA PELANGGAN</label>
+          <input id="editName" placeholder="Contoh: AHDI" required />
+        </div>
+        <div class="field">
+          <label>NOMOR / ID PELANGGAN</label>
+          <input id="editNumber" inputmode="numeric" placeholder="Masukkan nomor" required />
+        </div>
+        <div class="actions">
+          <button type="button" class="btn secondary" id="cancelBtn">Batal</button>
+          <button type="submit" class="btn savebtn">Simpan</button>
+          <button type="button" class="btn danger" id="deleteBtn">Hapus Data</button>
+        </div>
+      </form>
+    </section>
+
   </main>
 
 
@@ -339,12 +365,36 @@ let data=load(), editingId=null, activeCategory="";
 const $=id=>document.getElementById(id);
 const list=$("list"), search=$("search"), editor=$("editor"), form=$("editorForm");
 const editCategory=$("editCategory"),editName=$("editName"),editNumber=$("editNumber"),deleteBtn=$("deleteBtn");
-const categoryButtons=[...document.querySelectorAll("#categoryPicker button")];
+const categorySelect=$("categorySelect"),categorySelectText=$("categorySelectText"),categoryOptions=$("categoryOptions");
+const categoryButtons=[...document.querySelectorAll(".category-option")];
+const homeEls=[...document.querySelectorAll(".home-only")];
+function categoryLabel(value){
+  return {"Listrik Token":"Token PLN","Listrik Bulanan":"PLN Bulanan"}[value]||value;
+}
 function setEditCategory(value){
   editCategory.value=value;
+  categorySelectText.textContent=categoryLabel(value);
   categoryButtons.forEach(b=>b.classList.toggle("active",b.dataset.value===value));
 }
-categoryButtons.forEach(b=>b.addEventListener("click",()=>setEditCategory(b.dataset.value)));
+function showHome(){
+  editor.classList.remove("show");
+  homeEls.forEach(el=>el.classList.remove("hidden"));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function showEditor(){
+  homeEls.forEach(el=>el.classList.add("hidden"));
+  editor.classList.add("show");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+categorySelect.onclick=()=>{
+  const open=categoryOptions.classList.toggle("show");
+  categorySelect.classList.toggle("open",open);
+};
+categoryButtons.forEach(b=>b.addEventListener("click",()=>{
+  setEditCategory(b.dataset.value);
+  categoryOptions.classList.remove("show");
+  categorySelect.classList.remove("open");
+}));
 
 function load(){
   try{
@@ -399,7 +449,7 @@ function openEditor(x=null){
   $("editorTitle").textContent=x?"Edit Pelanggan":"Tambah Pelanggan";
   setEditCategory(x?.category??"Pulsa");editName.value=x?.name??"";editNumber.value=x?.number??"";
   deleteBtn.classList.toggle("show",!!x);
-  editor.classList.add("show");editor.scrollIntoView({behavior:"smooth",block:"nearest"});setTimeout(()=>editName.focus(),80)
+  categoryOptions.classList.remove("show");categorySelect.classList.remove("open");showEditor();setTimeout(()=>editName.focus(),80)
 }
 form.addEventListener("submit",e=>{
   e.preventDefault();
@@ -409,15 +459,16 @@ form.addEventListener("submit",e=>{
     const x=data.find(v=>v.id===editingId);
     if(x){x.category=editCategory.value;x.name=name;x.number=number}
   }else data.push({id:"u-"+Date.now(),category:editCategory.value,name,number});
-  save();editor.classList.remove("show");render();showToast("Data tersimpan")
+  save();showHome();render();showToast("Data tersimpan")
 });
 deleteBtn.onclick=()=>{
   if(!editingId)return;
   if(confirm("Hapus data pelanggan ini?")){
-    data=data.filter(x=>x.id!==editingId);save();editor.classList.remove("show");render();showToast("Data dihapus")
+    data=data.filter(x=>x.id!==editingId);save();showHome();render();showToast("Data dihapus")
   }
 };
-$("cancelBtn").onclick=()=>{editor.classList.remove("show");editingId=null};
+$("cancelBtn").onclick=()=>{editingId=null;showHome()};
+$("backBtn").onclick=()=>{editingId=null;showHome()};
 $("addBtn").onclick=()=>openEditor();
 $("clearSearch").onclick=()=>{search.value="";search.focus();render()};
 search.oninput=render;
