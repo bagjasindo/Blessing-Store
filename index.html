@@ -228,7 +228,6 @@
 
     @media(max-width:370px){
       .service-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-      .category-picker{grid-template-columns:repeat(2,minmax(0,1fr))}
       .brand-logo{width:min(100%,250px)}
     }
     @media(min-width:700px){
@@ -400,22 +399,50 @@ categoryButtons.forEach(b=>b.addEventListener("click",()=>{
   categorySelect.classList.remove("open");
 }));
 
+function cleanRecord(item,index){
+  if(!item || typeof item!=="object") return null;
+  const category=String(item.category??"").trim();
+  const name=String(item.name??"").trim();
+  const number=String(item.number??"").trim();
+  if(!category || !name || !number) return null;
+  return {
+    id:String(item.id??("local-"+index)),
+    category:category==="Token Listrik"?"Listrik Token":category,
+    name,
+    number
+  };
+}
+function cloneSeed(){return SEED.map(x=>({...x}))}
 function load(){
   try{
-    const x=localStorage.getItem(KEY);
-    if(x){
-      const saved=JSON.parse(x).map(item=>({...item,category:item.category==="Token Listrik"?"Listrik Token":item.category}));
-      for(const seed of SEED){
-        if(seed.category==="BPJS" && !saved.some(v=>v.category==="BPJS" && v.name===seed.name && v.number===seed.number)){
-          saved.push(seed);
+    const raw=localStorage.getItem(KEY);
+    if(raw){
+      const parsed=JSON.parse(raw);
+      if(Array.isArray(parsed)){
+        const saved=parsed.map(cleanRecord).filter(Boolean);
+        for(const seed of SEED){
+          if(seed.category==="BPJS" && !saved.some(v=>v.category==="BPJS" && v.name===seed.name && v.number===seed.number)){
+            saved.push({...seed});
+          }
         }
+        if(saved.length) return saved;
       }
-      return saved;
     }
-  }catch(e){}
-  return structuredClone(SEED);
+  }catch(e){
+    console.warn("Data lokal tidak dapat dibaca:",e);
+  }
+  return cloneSeed();
 }
-function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+function save(){
+  try{
+    localStorage.setItem(KEY,JSON.stringify(data));
+    return true;
+  }catch(e){
+    console.error("Data lokal gagal disimpan:",e);
+    showToast("Gagal menyimpan data");
+    return false;
+  }
+}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function updateStats(){}
 function showToast(msg="Nomor disalin"){
@@ -463,12 +490,16 @@ form.addEventListener("submit",e=>{
     const x=data.find(v=>v.id===editingId);
     if(x){x.category=editCategory.value;x.name=name;x.number=number}
   }else data.push({id:"u-"+Date.now(),category:editCategory.value,name,number});
-  save();showHome();render();showToast("Data tersimpan")
+  if(!save()) return;
+  showHome();render();showToast("Data tersimpan")
 });
 deleteBtn.onclick=()=>{
   if(!editingId)return;
   if(confirm("Hapus data pelanggan ini?")){
-    data=data.filter(x=>x.id!==editingId);save();showHome();render();showToast("Data dihapus")
+    const before=data;
+    data=data.filter(x=>x.id!==editingId);
+    if(!save()){data=before;return}
+    showHome();render();showToast("Data dihapus")
   }
 };
 $("cancelBtn").onclick=()=>{editingId=null;showHome()};
@@ -491,7 +522,7 @@ if("serviceWorker" in navigator){
     location.reload();
   });
   window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("./service-worker.js?v=12",{scope:"./"}).then(reg=>{
+    navigator.serviceWorker.register("./service-worker.js?v=13",{scope:"./"}).then(reg=>{
       reg.update().catch(()=>{});
       if(reg.waiting)reg.waiting.postMessage({type:"SKIP_WAITING"});
     }).catch(()=>{});
