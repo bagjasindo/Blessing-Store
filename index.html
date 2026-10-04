@@ -101,16 +101,20 @@
 
     dialog{
       width:min(94vw,520px);border:0;border-radius:24px 24px 0 0;background:#ffffff;color:#173331;padding:0;
-      position:fixed;bottom:0;top:auto;margin:0 auto;max-height:88vh;box-shadow:0 -24px 70px rgba(0,0,0,.45)
+      position:fixed;bottom:0;top:auto;margin:0 auto;max-height:82vh;box-shadow:0 -24px 70px rgba(0,0,0,.45)
     }
     dialog::backdrop{background:rgba(2,8,18,.78);backdrop-filter:blur(4px)}
     .sheet{padding:10px 18px 22px}.handle{width:44px;height:5px;border-radius:999px;background:#334965;margin:0 auto 16px}
     .sheethead{display:flex;justify-content:space-between;align-items:center;gap:12px}
     .sheet h2{margin:0;font-size:20px}.sheet p{margin:4px 0 0;color:var(--muted);font-size:12px}
     .field{margin-top:15px}.field label{display:block;color:#b8c7d9;font-size:11px;font-weight:800;margin-bottom:7px;letter-spacing:.03em}
-    .field input,.field select{
-      width:100%;height:50px;border-radius:14px;border:1px solid var(--line);background:#f8fbfa;color:#173331;padding:0 13px;outline:none
+    .field input{
+      width:100%;height:48px;border-radius:14px;border:1px solid var(--line);background:#f8fbfa;color:#173331;padding:0 13px;outline:none
     }
+    .category-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-height:164px;overflow:auto;padding:1px}
+    .category-picker button{min-height:40px;border:1px solid var(--line);border-radius:11px;background:#f8fbfa;color:#56706c;font-size:10.5px;font-weight:800;padding:6px}
+    .category-picker button.active{background:#e3f6f3;border-color:#49b9ae;color:#08766c;box-shadow:0 0 0 2px rgba(15,156,143,.08)}
+    @media(max-width:370px){.category-picker{grid-template-columns:repeat(2,minmax(0,1fr))}}
     .actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
     .btn{height:48px;border-radius:14px;border:0;font-weight:900}
     .secondary{background:#f1f6f5;color:#52716d;border:1px solid #30445f}.savebtn{background:#0f9c8f;color:#ffffff}
@@ -160,16 +164,7 @@
         <button class="service" data-cat="IndiHome"><span class="svc-ico"><svg viewBox="0 0 24 24" fill="none"><path d="m3 11 9-7 9 7v9H8v-6h8v6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 10.5a6 6 0 0 1 8 0M10 13a3 3 0 0 1 4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>IndiHome</span></button>
       </div>
 
-      <div class="search-wrap">
-        <label class="search-label" for="search">Cari Pelanggan</label>
-        <div class="searchbox">
-          <svg viewBox="0 0 24 24" fill="none"><path d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input id="search" type="search" placeholder="Nama atau nomor pelanggan..." autocomplete="off" />
-          <button id="clearSearch" class="clear" aria-label="Hapus pencarian">×</button>
-        </div>
-      </div>
 
-      <div class="master-box">
         <div class="master-text">
           <strong>Master Data</strong>
           <span>Tambah pelanggan baru ke perangkat ini</span>
@@ -205,19 +200,20 @@
       </div>
       <div class="field">
         <label>KATEGORI</label>
-        <select id="editCategory">
-          <option>Pulsa</option>
-          <option>Paket Data</option>
-          <option>Listrik Token</option>
-          <option>Listrik Bulanan</option>
-          <option>BPJS</option>
-          <option>DANA</option>
-          <option>GoPay</option>
-          <option>OVO</option>
-          <option>ShopeePay</option>
-          <option>PDAM</option>
-          <option>IndiHome</option>
-        </select>
+        <input type="hidden" id="editCategory" value="Pulsa" />
+        <div class="category-picker" id="categoryPicker">
+          <button type="button" data-value="Pulsa">Pulsa</button>
+          <button type="button" data-value="Paket Data">Paket Data</button>
+          <button type="button" data-value="Listrik Token">Token PLN</button>
+          <button type="button" data-value="Listrik Bulanan">PLN Bulanan</button>
+          <button type="button" data-value="BPJS">BPJS</button>
+          <button type="button" data-value="DANA">DANA</button>
+          <button type="button" data-value="GoPay">GoPay</button>
+          <button type="button" data-value="OVO">OVO</button>
+          <button type="button" data-value="ShopeePay">ShopeePay</button>
+          <button type="button" data-value="PDAM">PDAM</button>
+          <button type="button" data-value="IndiHome">IndiHome</button>
+        </div>
       </div>
       <div class="field">
         <label>NAMA PELANGGAN</label>
@@ -249,6 +245,12 @@ let data=load(), editingId=null, activeCategory="";
 const $=id=>document.getElementById(id);
 const list=$("list"), search=$("search"), editor=$("editor"), form=$("editorForm");
 const editCategory=$("editCategory"),editName=$("editName"),editNumber=$("editNumber"),deleteBtn=$("deleteBtn");
+const categoryButtons=[...document.querySelectorAll("#categoryPicker button")];
+function setEditCategory(value){
+  editCategory.value=value;
+  categoryButtons.forEach(b=>b.classList.toggle("active",b.dataset.value===value));
+}
+categoryButtons.forEach(b=>b.addEventListener("click",()=>setEditCategory(b.dataset.value)));
 
 function load(){
   try{
@@ -301,7 +303,7 @@ function render(){
 function openEditor(x=null){
   editingId=x?.id??null;
   $("editorTitle").textContent=x?"Edit Pelanggan":"Tambah Pelanggan";
-  editCategory.value=x?.category??"Pulsa";editName.value=x?.name??"";editNumber.value=x?.number??"";
+  setEditCategory(x?.category??"Pulsa");editName.value=x?.name??"";editNumber.value=x?.number??"";
   deleteBtn.classList.toggle("show",!!x);
   editor.showModal();setTimeout(()=>editName.focus(),80)
 }
