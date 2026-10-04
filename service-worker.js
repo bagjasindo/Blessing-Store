@@ -1,4 +1,4 @@
-const CACHE="blessing-data-v14";
+const CACHE="blessing-data-v15";
 const CORE_ASSETS=[
   "./index.html",
   "./manifest.webmanifest?v=12",
