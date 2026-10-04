@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#08111f" />
+  <meta name="theme-color" content="#0f9c8f" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Blessing Store • Data Pelanggan</title>
   <link rel="manifest" href="./manifest.webmanifest" />
   <style>
     :root{
-      --bg:#08111f; --bg2:#0b1628; --panel:#101c30; --panel2:#14233a;
-      --line:#243650; --text:#f7fbff; --muted:#91a3ba; --soft:#c8d5e6;
-      --blue:#29b6f6; --blue2:#0ea5e9; --green:#22c55e; --red:#ef4444;
+      --bg:#f4f7f7; --bg2:#eef4f3; --panel:#ffffff; --panel2:#f8fbfa;
+      --line:#d7e4e2; --text:#173331; --muted:#6f8582; --soft:#3e5f5b;
+      --blue:#0f9c8f; --blue2:#0a887c; --green:#22c55e; --red:#ef4444;
       --shadow:0 18px 50px rgba(0,0,0,.28); --radius:22px;
     }
     *{box-sizing:border-box}
@@ -21,34 +21,29 @@
       margin:0; min-height:100vh; color:var(--text);
       font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
       background:
-        radial-gradient(circle at 20% 0%,rgba(41,182,246,.16),transparent 34%),
-        linear-gradient(180deg,#08111f 0%,#0b1628 55%,#08111f 100%);
+        radial-gradient(circle at 20% 0%,rgba(15,156,143,.10),transparent 34%),
+        linear-gradient(180deg,#f8fbfa 0%,#f2f7f6 55%,#edf4f3 100%);
       -webkit-font-smoothing:antialiased;
     }
     button,input{font:inherit}
     button{touch-action:manipulation}
     .shell{max-width:760px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 14px calc(96px + env(safe-area-inset-bottom))}
     .hero{
-      position:relative; overflow:hidden; border:1px solid rgba(255,255,255,.06);
-      background:linear-gradient(135deg,rgba(18,35,58,.96),rgba(10,23,40,.96));
-      border-radius:26px; padding:20px; box-shadow:var(--shadow); margin-bottom:16px;
+      position:relative; overflow:hidden; border:1px solid var(--line);
+      background:#ffffff;
+      border-radius:26px; padding:18px; box-shadow:0 14px 42px rgba(20,80,72,.10); margin-bottom:16px;
     }
     .hero:after{
       content:""; position:absolute; width:190px; height:190px; right:-80px; top:-90px;
-      border-radius:50%; background:radial-gradient(circle,rgba(41,182,246,.20),rgba(41,182,246,0) 70%);
+      border-radius:50%; background:radial-gradient(circle,rgba(15,156,143,.13),rgba(15,156,143,0) 70%);
       pointer-events:none;
     }
-    .brandline{display:flex;align-items:center;gap:12px}
-    .brandmark{
-      width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
-      background:linear-gradient(145deg,#0ea5e9,#38bdf8);color:#05263a;box-shadow:0 12px 24px rgba(14,165,233,.24)
-    }
-    .brandmark svg{width:27px;height:27px}
-    .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7dd3fc;font-weight:800}
-    h1{font-size:23px;line-height:1.1;margin:4px 0 0;letter-spacing:-.02em}
-    .hero-sub{margin:14px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+    .brandline{display:block}
+    .brand-logo{display:block;width:100%;max-width:430px;height:auto;position:relative;z-index:1}
+    .brand-title{font-size:18px;line-height:1.2;margin:14px 0 0;letter-spacing:-.01em;color:#173331}
+    .hero-sub{margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
     .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
-    .stat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);border-radius:15px;padding:11px}
+    .stat{background:#f7fbfa;border:1px solid var(--line);border-radius:15px;padding:11px}
     .stat b{display:block;font-size:18px}.stat span{display:block;color:var(--muted);font-size:10px;margin-top:2px}
 
     .tools{padding:4px 0 10px}
@@ -56,39 +51,39 @@
     .searchbox svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:19px;height:19px;color:#7f94ad}
     .searchbox input{
       width:100%;height:52px;border-radius:16px;border:1px solid var(--line);outline:none;
-      background:#0d192b;color:white;padding:0 46px 0 44px;font-size:15px;box-shadow:0 10px 30px rgba(0,0,0,.16)
+      background:#ffffff;color:#173331;padding:0 46px 0 44px;font-size:15px;box-shadow:0 10px 30px rgba(0,0,0,.16)
     }
-    .searchbox input:focus{border-color:#238ec1;box-shadow:0 0 0 3px rgba(41,182,246,.12)}
+    .searchbox input:focus{border-color:#0f9c8f;box-shadow:0 0 0 3px rgba(15,156,143,.12)}
     .clear{position:absolute;right:8px;top:8px;width:36px;height:36px;border:0;border-radius:11px;background:transparent;color:#8ba0b9;font-size:20px;display:none}
     .clear.show{display:block}
     .service-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
-    .service{min-height:74px;border:1px solid var(--line);background:#0e1a2d;color:#9cafc5;border-radius:16px;padding:9px 5px;font-size:10px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px}
-    .service.active{background:linear-gradient(180deg,#123657,#102d49);border-color:#1e6693;color:#dff5ff;box-shadow:inset 0 0 0 1px rgba(56,189,248,.06)}
-    .svc-ico{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(56,189,248,.11);color:#7dd3fc;font-size:15px;font-weight:900}
-    .service.active .svc-ico{background:rgba(56,189,248,.2);color:#e6f8ff}
+    .service{min-height:74px;border:1px solid var(--line);background:#ffffff;color:#5f7672;border-radius:16px;padding:9px 5px;font-size:10px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px}
+    .service.active{background:linear-gradient(180deg,#eaf8f6,#e0f3f0);border-color:#5bc5ba;color:#0b766d;box-shadow:inset 0 0 0 1px rgba(15,156,143,.06)}
+    .svc-ico{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(15,156,143,.10);color:#0f9c8f;font-size:15px;font-weight:900}
+    .service.active .svc-ico{background:rgba(15,156,143,.18);color:#08766c}
 
     .sectionbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 2px 10px}
     .sectionbar strong{font-size:14px}.sectionbar span{font-size:12px;color:var(--muted)}
     .list{display:grid;gap:10px}
     .card{
-      border:1px solid rgba(255,255,255,.065); background:linear-gradient(180deg,rgba(17,30,50,.97),rgba(13,25,43,.97));
+      border:1px solid var(--line); background:#ffffff;
       border-radius:19px;padding:14px;box-shadow:0 12px 34px rgba(0,0,0,.18)
     }
     .cardtop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
     .identity{min-width:0}
     .name{font-size:16px;font-weight:800;line-height:1.35;letter-spacing:-.01em;word-break:break-word}
-    .badge{display:inline-flex;align-items:center;gap:6px;margin-top:6px;color:#7dd3fc;font-size:11px;font-weight:700}
-    .badge i{width:6px;height:6px;border-radius:50%;background:#38bdf8;box-shadow:0 0 0 4px rgba(56,189,248,.08)}
+    .badge{display:inline-flex;align-items:center;gap:6px;margin-top:6px;color:#0f9c8f;font-size:11px;font-weight:700}
+    .badge i{width:6px;height:6px;border-radius:50%;background:#0f9c8f;box-shadow:0 0 0 4px rgba(56,189,248,.08)}
     .edit{
       width:38px;height:38px;display:grid;place-items:center;border:1px solid #29405f;border-radius:12px;
-      background:#14233a;color:#b7c7da;padding:0
+      background:#f5f9f8;color:#52716d;padding:0
     }
     .edit svg{width:17px;height:17px}
-    .numberline{display:flex;align-items:center;gap:10px;margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.055)}
-    .number{font-family:"SFMono-Regular",Consolas,monospace;font-size:17px;font-weight:800;letter-spacing:.035em;color:#f3f8ff;flex:1;word-break:break-all}
+    .numberline{display:flex;align-items:center;gap:10px;margin-top:13px;padding-top:12px;border-top:1px solid #e4eceb}
+    .number{font-family:"SFMono-Regular",Consolas,monospace;font-size:17px;font-weight:800;letter-spacing:.035em;color:#173331;flex:1;word-break:break-all}
     .copy{
-      min-width:74px;height:40px;border:0;border-radius:12px;background:linear-gradient(180deg,#38bdf8,#1ea6df);
-      color:#042c42;font-size:12px;font-weight:900;box-shadow:0 8px 18px rgba(14,165,233,.18)
+      min-width:74px;height:40px;border:0;border-radius:12px;background:linear-gradient(180deg,#13aa9c,#0f9c8f);
+      color:#ffffff;font-size:12px;font-weight:900;box-shadow:0 8px 18px rgba(14,165,233,.18)
     }
     .copy.done{background:linear-gradient(180deg,#34d399,#22c55e);color:#052e16}
     .empty{
@@ -99,13 +94,13 @@
 
     .fab{
       position:fixed;z-index:9;right:max(18px,calc((100vw - 760px)/2 + 18px));bottom:calc(18px + env(safe-area-inset-bottom));
-      border:0;border-radius:18px;background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#04293d;
+      border:0;border-radius:18px;background:linear-gradient(135deg,#16aa9c,#0f9c8f);color:#ffffff;
       height:56px;padding:0 18px;display:flex;align-items:center;gap:9px;font-weight:900;box-shadow:0 16px 40px rgba(14,165,233,.32)
     }
     .fab svg{width:20px;height:20px}
 
     dialog{
-      width:min(94vw,520px);border:0;border-radius:24px 24px 0 0;background:#101c30;color:white;padding:0;
+      width:min(94vw,520px);border:0;border-radius:24px 24px 0 0;background:#ffffff;color:#173331;padding:0;
       position:fixed;bottom:0;top:auto;margin:0 auto;max-height:88vh;box-shadow:0 -24px 70px rgba(0,0,0,.45)
     }
     dialog::backdrop{background:rgba(2,8,18,.78);backdrop-filter:blur(4px)}
@@ -114,11 +109,11 @@
     .sheet h2{margin:0;font-size:20px}.sheet p{margin:4px 0 0;color:var(--muted);font-size:12px}
     .field{margin-top:15px}.field label{display:block;color:#b8c7d9;font-size:11px;font-weight:800;margin-bottom:7px;letter-spacing:.03em}
     .field input,.field select{
-      width:100%;height:50px;border-radius:14px;border:1px solid var(--line);background:#0b1627;color:white;padding:0 13px;outline:none
+      width:100%;height:50px;border-radius:14px;border:1px solid var(--line);background:#f8fbfa;color:#173331;padding:0 13px;outline:none
     }
     .actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
     .btn{height:48px;border-radius:14px;border:0;font-weight:900}
-    .secondary{background:#1c2b42;color:#cbd8e8;border:1px solid #30445f}.savebtn{background:#38bdf8;color:#07334b}
+    .secondary{background:#f1f6f5;color:#52716d;border:1px solid #30445f}.savebtn{background:#0f9c8f;color:#ffffff}
     .danger{grid-column:1/-1;background:rgba(239,68,68,.12);color:#ff9494;border:1px solid rgba(239,68,68,.25);display:none}
     .danger.show{display:block}
 
@@ -139,13 +134,8 @@
   <main class="shell">
     <section class="hero">
       <div class="brandline">
-        <div class="brandmark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M13.2 2 5.6 13h5.1L9.9 22 18.4 9.6h-5.2L13.2 2Z" fill="currentColor"/></svg>
-        </div>
-        <div>
-          <div class="eyebrow">Blessing Store</div>
-          <h1>Master Data Pelanggan Konter</h1>
-        </div>
+        <img class="brand-logo" src="./logo-blessing.svg" alt="Blessing Store" />
+        <h1 class="brand-title">Master Data Pelanggan Konter</h1>
       </div>
       <p class="hero-sub">Simpan nama dan nomor pelanggan berdasarkan jenis layanan. Cepat dicari, mudah disalin.</p>
       <div class="stats">
