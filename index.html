@@ -3,77 +3,222 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" content="#08111f" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Daftar Listrik Pelanggan</title>
+  <title>Blessing Store • Data Pelanggan</title>
   <link rel="manifest" href="./manifest.webmanifest" />
   <style>
-    :root{--bg:#0f172a;--panel:#111827;--panel2:#1e293b;--line:#334155;--text:#f8fafc;--muted:#94a3b8;--accent:#38bdf8;--good:#22c55e;--danger:#ef4444}
-    *{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#0f172a,#111827);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
-    .app{max-width:760px;margin:0 auto;padding:18px 14px 36px}
-    .head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}
-    h1{font-size:24px;line-height:1.15;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:5px}
-    .pill{background:#0ea5e922;border:1px solid #0ea5e944;color:#7dd3fc;border-radius:999px;padding:6px 10px;font-size:12px;white-space:nowrap}
-    .controls{display:grid;gap:10px;grid-template-columns:1fr 150px;margin-bottom:10px}
-    input,select{width:100%;border:1px solid var(--line);background:#0b1220;color:white;border-radius:12px;padding:13px 14px;font-size:15px;outline:none}
-    input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px #38bdf822}
-    .toolbar{display:flex;justify-content:space-between;align-items:center;margin:10px 0 12px;gap:10px}
-    .count{color:var(--muted);font-size:13px}.btn{border:0;border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer}
-    .btn-add{background:var(--accent);color:#082f49}.list{display:grid;gap:10px}
-    .card{background:#111827;border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:0 10px 30px #0002}
-    .row-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-    .name{font-size:17px;font-weight:800;line-height:1.25}.cat{color:#7dd3fc;font-size:12px;margin-top:4px}
-    .numrow{display:flex;align-items:center;gap:10px;margin-top:12px}.number{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:18px;font-weight:800;letter-spacing:.03em;word-break:break-all;flex:1}
-    .copy{background:var(--accent);color:#082f49}.copy.done{background:var(--good);color:white}
-    .menu{background:#1e293b;color:#cbd5e1;border:1px solid #334155;padding:8px 10px}
-    .empty{color:var(--muted);text-align:center;padding:36px 8px}
-    dialog{border:1px solid var(--line);border-radius:16px;background:#111827;color:white;width:min(92vw,480px);padding:0}
-    dialog::backdrop{background:#0008}.dlg{padding:18px}.dlg h2{margin:0 0 14px;font-size:20px}.field{margin:10px 0}.field label{display:block;color:#cbd5e1;font-size:12px;margin-bottom:6px}
-    .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;flex-wrap:wrap}.btn-secondary{background:#334155;color:#e2e8f0}.btn-danger{background:var(--danger);color:white}.btn-save{background:var(--accent);color:#082f49}
-    .note{margin-top:16px;color:#64748b;font-size:11px;text-align:center}
-    @media(max-width:560px){.controls{grid-template-columns:1fr}.app{padding-left:12px;padding-right:12px}.number{font-size:17px}}
+    :root{
+      --bg:#08111f; --bg2:#0b1628; --panel:#101c30; --panel2:#14233a;
+      --line:#243650; --text:#f7fbff; --muted:#91a3ba; --soft:#c8d5e6;
+      --blue:#29b6f6; --blue2:#0ea5e9; --green:#22c55e; --red:#ef4444;
+      --shadow:0 18px 50px rgba(0,0,0,.28); --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html{background:var(--bg)}
+    body{
+      margin:0; min-height:100vh; color:var(--text);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(circle at 20% 0%,rgba(41,182,246,.16),transparent 34%),
+        linear-gradient(180deg,#08111f 0%,#0b1628 55%,#08111f 100%);
+      -webkit-font-smoothing:antialiased;
+    }
+    button,input{font:inherit}
+    button{touch-action:manipulation}
+    .shell{max-width:760px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 14px calc(96px + env(safe-area-inset-bottom))}
+    .hero{
+      position:relative; overflow:hidden; border:1px solid rgba(255,255,255,.06);
+      background:linear-gradient(135deg,rgba(18,35,58,.96),rgba(10,23,40,.96));
+      border-radius:26px; padding:20px; box-shadow:var(--shadow); margin-bottom:16px;
+    }
+    .hero:after{
+      content:""; position:absolute; width:190px; height:190px; right:-80px; top:-90px;
+      border-radius:50%; background:radial-gradient(circle,rgba(41,182,246,.20),rgba(41,182,246,0) 70%);
+      pointer-events:none;
+    }
+    .brandline{display:flex;align-items:center;gap:12px}
+    .brandmark{
+      width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+      background:linear-gradient(145deg,#0ea5e9,#38bdf8);color:#05263a;box-shadow:0 12px 24px rgba(14,165,233,.24)
+    }
+    .brandmark svg{width:27px;height:27px}
+    .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7dd3fc;font-weight:800}
+    h1{font-size:23px;line-height:1.1;margin:4px 0 0;letter-spacing:-.02em}
+    .hero-sub{margin:14px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+    .stat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);border-radius:15px;padding:11px}
+    .stat b{display:block;font-size:18px}.stat span{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+
+    .tools{position:sticky;top:0;z-index:5;padding:8px 0 10px;background:linear-gradient(180deg,rgba(8,17,31,.98),rgba(8,17,31,.88),rgba(8,17,31,0))}
+    .searchbox{position:relative}
+    .searchbox svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:19px;height:19px;color:#7f94ad}
+    .searchbox input{
+      width:100%;height:52px;border-radius:16px;border:1px solid var(--line);outline:none;
+      background:#0d192b;color:white;padding:0 46px 0 44px;font-size:15px;box-shadow:0 10px 30px rgba(0,0,0,.16)
+    }
+    .searchbox input:focus{border-color:#238ec1;box-shadow:0 0 0 3px rgba(41,182,246,.12)}
+    .clear{position:absolute;right:8px;top:8px;width:36px;height:36px;border:0;border-radius:11px;background:transparent;color:#8ba0b9;font-size:20px;display:none}
+    .clear.show{display:block}
+    .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}
+    .tab{
+      border:1px solid var(--line);background:#0e1a2d;color:#9cafc5;border-radius:13px;
+      min-height:40px;padding:8px 7px;font-size:12px;font-weight:700
+    }
+    .tab.active{background:linear-gradient(180deg,#123657,#102d49);border-color:#1e6693;color:#dff5ff;box-shadow:inset 0 0 0 1px rgba(56,189,248,.05)}
+
+    .sectionbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 2px 10px}
+    .sectionbar strong{font-size:14px}.sectionbar span{font-size:12px;color:var(--muted)}
+    .list{display:grid;gap:10px}
+    .card{
+      border:1px solid rgba(255,255,255,.065); background:linear-gradient(180deg,rgba(17,30,50,.97),rgba(13,25,43,.97));
+      border-radius:19px;padding:14px;box-shadow:0 12px 34px rgba(0,0,0,.18)
+    }
+    .cardtop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+    .identity{min-width:0}
+    .name{font-size:16px;font-weight:800;line-height:1.35;letter-spacing:-.01em;word-break:break-word}
+    .badge{display:inline-flex;align-items:center;gap:6px;margin-top:6px;color:#7dd3fc;font-size:11px;font-weight:700}
+    .badge i{width:6px;height:6px;border-radius:50%;background:#38bdf8;box-shadow:0 0 0 4px rgba(56,189,248,.08)}
+    .edit{
+      width:38px;height:38px;display:grid;place-items:center;border:1px solid #29405f;border-radius:12px;
+      background:#14233a;color:#b7c7da;padding:0
+    }
+    .edit svg{width:17px;height:17px}
+    .numberline{display:flex;align-items:center;gap:10px;margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.055)}
+    .number{font-family:"SFMono-Regular",Consolas,monospace;font-size:17px;font-weight:800;letter-spacing:.035em;color:#f3f8ff;flex:1;word-break:break-all}
+    .copy{
+      min-width:74px;height:40px;border:0;border-radius:12px;background:linear-gradient(180deg,#38bdf8,#1ea6df);
+      color:#042c42;font-size:12px;font-weight:900;box-shadow:0 8px 18px rgba(14,165,233,.18)
+    }
+    .copy.done{background:linear-gradient(180deg,#34d399,#22c55e);color:#052e16}
+    .empty{
+      text-align:center;padding:42px 18px;color:var(--muted);border:1px dashed #29405a;border-radius:20px;background:rgba(255,255,255,.02)
+    }
+    .empty svg{width:36px;height:36px;margin-bottom:8px;color:#4d647f}
+    .footnote{text-align:center;color:#5f738c;font-size:10px;margin:18px 0 0}
+
+    .fab{
+      position:fixed;z-index:9;right:max(18px,calc((100vw - 760px)/2 + 18px));bottom:calc(18px + env(safe-area-inset-bottom));
+      border:0;border-radius:18px;background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#04293d;
+      height:56px;padding:0 18px;display:flex;align-items:center;gap:9px;font-weight:900;box-shadow:0 16px 40px rgba(14,165,233,.32)
+    }
+    .fab svg{width:20px;height:20px}
+
+    dialog{
+      width:min(94vw,520px);border:0;border-radius:24px 24px 0 0;background:#101c30;color:white;padding:0;
+      position:fixed;bottom:0;top:auto;margin:0 auto;max-height:88vh;box-shadow:0 -24px 70px rgba(0,0,0,.45)
+    }
+    dialog::backdrop{background:rgba(2,8,18,.78);backdrop-filter:blur(4px)}
+    .sheet{padding:10px 18px 22px}.handle{width:44px;height:5px;border-radius:999px;background:#334965;margin:0 auto 16px}
+    .sheethead{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .sheet h2{margin:0;font-size:20px}.sheet p{margin:4px 0 0;color:var(--muted);font-size:12px}
+    .field{margin-top:15px}.field label{display:block;color:#b8c7d9;font-size:11px;font-weight:800;margin-bottom:7px;letter-spacing:.03em}
+    .field input,.field select{
+      width:100%;height:50px;border-radius:14px;border:1px solid var(--line);background:#0b1627;color:white;padding:0 13px;outline:none
+    }
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
+    .btn{height:48px;border-radius:14px;border:0;font-weight:900}
+    .secondary{background:#1c2b42;color:#cbd8e8;border:1px solid #30445f}.savebtn{background:#38bdf8;color:#07334b}
+    .danger{grid-column:1/-1;background:rgba(239,68,68,.12);color:#ff9494;border:1px solid rgba(239,68,68,.25);display:none}
+    .danger.show{display:block}
+
+    .toast{
+      position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(15px);
+      background:#e9fff1;color:#14532d;border:1px solid #9cebb8;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:800;
+      opacity:0;pointer-events:none;transition:.22s;z-index:20;box-shadow:0 12px 30px rgba(0,0,0,.25)
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(min-width:700px){
+      .shell{padding-top:24px}.list{grid-template-columns:1fr 1fr}.hero{padding:24px}.fab{right:max(24px,calc((100vw - 760px)/2 + 24px))}
+      dialog{border-radius:24px;bottom:auto;top:50%;transform:translateY(-50%)}
+    }
   </style>
 </head>
 <body>
-<div class="app">
-  <div class="head">
-    <div><h1>Daftar Listrik Pelanggan</h1><div class="sub">Cari nama atau nomor, lalu tekan Copy.</div></div>
-    <div id="allCount" class="pill">0 data</div>
-  </div>
+  <main class="shell">
+    <section class="hero">
+      <div class="brandline">
+        <div class="brandmark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M13.2 2 5.6 13h5.1L9.9 22 18.4 9.6h-5.2L13.2 2Z" fill="currentColor"/></svg>
+        </div>
+        <div>
+          <div class="eyebrow">Blessing Store</div>
+          <h1>Data Pelanggan Listrik</h1>
+        </div>
+      </div>
+      <p class="hero-sub">Cari pelanggan dengan cepat, lalu salin nomor token atau ID listrik langsung dari HP.</p>
+      <div class="stats">
+        <div class="stat"><b id="statAll">0</b><span>Total data</span></div>
+        <div class="stat"><b id="statToken">0</b><span>Token listrik</span></div>
+        <div class="stat"><b id="statMonthly">0</b><span>Listrik bulanan</span></div>
+      </div>
+    </section>
 
-  <div class="controls">
-    <input id="search" type="search" placeholder="Cari nama / nomor..." autocomplete="off" />
-    <select id="category">
-      <option value="">Semua kategori</option>
-      <option value="Token Listrik">Token Listrik</option>
-      <option value="Listrik Bulanan">Listrik Bulanan</option>
-    </select>
-  </div>
+    <section class="tools">
+      <div class="searchbox">
+        <svg viewBox="0 0 24 24" fill="none"><path d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="search" type="search" placeholder="Cari nama atau nomor..." autocomplete="off" />
+        <button id="clearSearch" class="clear" aria-label="Hapus pencarian">×</button>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-cat="">Semua</button>
+        <button class="tab" data-cat="Token Listrik">Token</button>
+        <button class="tab" data-cat="Listrik Bulanan">Bulanan</button>
+      </div>
+    </section>
 
-  <div class="toolbar">
-    <div id="shownCount" class="count"></div>
-    <button class="btn btn-add" id="addBtn">+ Tambah</button>
-  </div>
-
-  <div id="list" class="list"></div>
-  <div id="empty" class="empty" hidden>Data tidak ditemukan.</div>
-  <div class="note">Data edit/tambah di HP tersimpan di perangkat ini.</div>
-</div>
-
-<dialog id="editor">
-  <form method="dialog" class="dlg" id="editorForm">
-    <h2 id="editorTitle">Tambah Data</h2>
-    <div class="field"><label>Kategori</label><select id="editCategory"><option>Token Listrik</option><option>Listrik Bulanan</option></select></div>
-    <div class="field"><label>Nama pelanggan</label><input id="editName" required /></div>
-    <div class="field"><label>Nomor / ID pelanggan</label><input id="editNumber" inputmode="numeric" required /></div>
-    <div class="actions">
-      <button type="button" class="btn btn-danger" id="deleteBtn" hidden>Hapus</button>
-      <button type="button" class="btn btn-secondary" id="cancelBtn">Batal</button>
-      <button type="submit" class="btn btn-save">Simpan</button>
+    <div class="sectionbar">
+      <strong>Daftar Pelanggan</strong>
+      <span id="shownCount"></span>
     </div>
-  </form>
-</dialog>
+
+    <section id="list" class="list"></section>
+    <div id="empty" class="empty" hidden>
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9.5 4h5M8 8h8m-9 4h10M8 16h5M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <div>Data tidak ditemukan.</div>
+    </div>
+    <div class="footnote">Perubahan Tambah / Edit / Hapus tersimpan lokal di HP ini.</div>
+  </main>
+
+  <button class="fab" id="addBtn">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    Tambah
+  </button>
+
+  <dialog id="editor">
+    <form method="dialog" class="sheet" id="editorForm">
+      <div class="handle"></div>
+      <div class="sheethead">
+        <div>
+          <h2 id="editorTitle">Tambah Pelanggan</h2>
+          <p>Data disimpan di perangkat ini.</p>
+        </div>
+      </div>
+      <div class="field">
+        <label>KATEGORI</label>
+        <select id="editCategory">
+          <option>Token Listrik</option>
+          <option>Listrik Bulanan</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>NAMA PELANGGAN</label>
+        <input id="editName" placeholder="Contoh: AHDI" required />
+      </div>
+      <div class="field">
+        <label>NOMOR / ID PELANGGAN</label>
+        <input id="editNumber" inputmode="numeric" placeholder="Masukkan nomor" required />
+      </div>
+      <div class="actions">
+        <button type="button" class="btn secondary" id="cancelBtn">Batal</button>
+        <button type="submit" class="btn savebtn">Simpan</button>
+        <button type="button" class="btn danger" id="deleteBtn">Hapus Data</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast">Nomor disalin</div>
 
 <script>
 const SEED = [
@@ -82,55 +227,85 @@ const SEED = [
 ].map((x,i)=>({id:"seed-"+i,category:x[0],name:x[1],number:x[2]}));
 
 const KEY="blessing-store-data-pelanggan-v1";
-let data = load();
-let editingId = null;
+let data=load(), editingId=null, activeCategory="";
+const $=id=>document.getElementById(id);
+const list=$("list"), search=$("search"), editor=$("editor"), form=$("editorForm");
+const editCategory=$("editCategory"),editName=$("editName"),editNumber=$("editNumber"),deleteBtn=$("deleteBtn");
 
-function load(){
-  try{const v=localStorage.getItem(KEY); if(v) return JSON.parse(v);}catch(e){}
-  return structuredClone(SEED);
-}
+function load(){try{const x=localStorage.getItem(KEY);if(x)return JSON.parse(x)}catch(e){}return structuredClone(SEED)}
 function save(){localStorage.setItem(KEY,JSON.stringify(data))}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-
-const list=document.getElementById("list"), search=document.getElementById("search"), category=document.getElementById("category");
-const editor=document.getElementById("editor"), form=document.getElementById("editorForm"), editCategory=document.getElementById("editCategory"), editName=document.getElementById("editName"), editNumber=document.getElementById("editNumber"), deleteBtn=document.getElementById("deleteBtn");
-
+function updateStats(){
+  $("statAll").textContent=data.length;
+  $("statToken").textContent=data.filter(x=>x.category==="Token Listrik").length;
+  $("statMonthly").textContent=data.filter(x=>x.category==="Listrik Bulanan").length;
+}
+function showToast(msg="Nomor disalin"){
+  const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(showToast.t);showToast.t=setTimeout(()=>t.classList.remove("show"),1200)
+}
 function render(){
-  const q=search.value.trim().toLowerCase(), c=category.value;
-  const shown=data.filter(x=>(!c||x.category===c)&&(!q||x.name.toLowerCase().includes(q)||x.number.includes(q)));
-  document.getElementById("allCount").textContent=data.length+" data";
-  document.getElementById("shownCount").textContent="Menampilkan "+shown.length+" data";
+  const q=search.value.trim().toLowerCase();
+  const shown=data.filter(x=>(!activeCategory||x.category===activeCategory)&&(!q||x.name.toLowerCase().includes(q)||x.number.includes(q)))
+                  .sort((a,b)=>a.name.localeCompare(b.name,"id"));
+  updateStats();
+  $("shownCount").textContent=shown.length+" data";
+  $("clearSearch").classList.toggle("show",!!search.value);
   list.innerHTML="";
-  document.getElementById("empty").hidden=shown.length!==0;
-  for(const x of shown){
-    const el=document.createElement("div"); el.className="card";
-    el.innerHTML='<div class="row-top"><div><div class="name">'+esc(x.name)+'</div><div class="cat">'+esc(x.category)+'</div></div><button class="btn menu">Edit</button></div><div class="numrow"><div class="number">'+esc(x.number)+'</div><button class="btn copy">Copy</button></div>';
-    const [edit,copy]=el.querySelectorAll("button");
+  $("empty").hidden=shown.length!==0;
+  shown.forEach(x=>{
+    const el=document.createElement("article");el.className="card";
+    el.innerHTML=`<div class="cardtop">
+      <div class="identity"><div class="name">${esc(x.name)}</div><div class="badge"><i></i>${esc(x.category)}</div></div>
+      <button class="edit" aria-label="Edit data">
+        <svg viewBox="0 0 24 24" fill="none"><path d="m14.7 5.3 4 4M4 20l4.2-1 10.4-10.4a2 2 0 0 0 0-2.8l-.4-.4a2 2 0 0 0-2.8 0L5 15.8 4 20Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="numberline"><div class="number">${esc(x.number)}</div><button class="copy">Copy</button></div>`;
+    const edit=el.querySelector(".edit"),copy=el.querySelector(".copy");
     edit.onclick=()=>openEditor(x);
-    copy.onclick=async()=>{try{await navigator.clipboard.writeText(x.number)}catch(e){const t=document.createElement("textarea");t.value=x.number;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove()}copy.textContent="Disalin";copy.classList.add("done");setTimeout(()=>{copy.textContent="Copy";copy.classList.remove("done")},1000)};
-    list.appendChild(el);
-  }
+    copy.onclick=async()=>{
+      try{await navigator.clipboard.writeText(x.number)}
+      catch(e){const ta=document.createElement("textarea");ta.value=x.number;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove()}
+      copy.textContent="Disalin";copy.classList.add("done");showToast();setTimeout(()=>{copy.textContent="Copy";copy.classList.remove("done")},900)
+    };
+    list.appendChild(el)
+  })
 }
 function openEditor(x=null){
   editingId=x?.id??null;
-  document.getElementById("editorTitle").textContent=x?"Edit Data":"Tambah Data";
-  editCategory.value=x?.category??"Token Listrik"; editName.value=x?.name??""; editNumber.value=x?.number??"";
-  deleteBtn.hidden=!x; editor.showModal(); setTimeout(()=>editName.focus(),50);
+  $("editorTitle").textContent=x?"Edit Pelanggan":"Tambah Pelanggan";
+  editCategory.value=x?.category??"Token Listrik";editName.value=x?.name??"";editNumber.value=x?.number??"";
+  deleteBtn.classList.toggle("show",!!x);
+  editor.showModal();setTimeout(()=>editName.focus(),80)
 }
 form.addEventListener("submit",e=>{
   e.preventDefault();
-  const name=editName.value.trim(), number=editNumber.value.trim();
+  const name=editName.value.trim(),number=editNumber.value.trim();
   if(!name||!number)return;
-  if(editingId){const x=data.find(v=>v.id===editingId); if(x){x.category=editCategory.value;x.name=name;x.number=number}}
-  else data.push({id:"u-"+Date.now(),category:editCategory.value,name,number});
-  save(); editor.close(); render();
+  if(editingId){
+    const x=data.find(v=>v.id===editingId);
+    if(x){x.category=editCategory.value;x.name=name;x.number=number}
+  }else data.push({id:"u-"+Date.now(),category:editCategory.value,name,number});
+  save();editor.close();render();showToast("Data tersimpan")
 });
-deleteBtn.onclick=()=>{if(!editingId)return;if(confirm("Hapus data ini?")){data=data.filter(x=>x.id!==editingId);save();editor.close();render()}};
-document.getElementById("cancelBtn").onclick=()=>editor.close();
-document.getElementById("addBtn").onclick=()=>openEditor();
-search.oninput=render; category.onchange=render; render();
+deleteBtn.onclick=()=>{
+  if(!editingId)return;
+  if(confirm("Hapus data pelanggan ini?")){
+    data=data.filter(x=>x.id!==editingId);save();editor.close();render();showToast("Data dihapus")
+  }
+};
+$("cancelBtn").onclick=()=>editor.close();
+$("addBtn").onclick=()=>openEditor();
+$("clearSearch").onclick=()=>{search.value="";search.focus();render()};
+search.oninput=render;
+document.querySelectorAll(".tab").forEach(btn=>btn.onclick=()=>{
+  activeCategory=btn.dataset.cat;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===btn));
+  render()
+});
+render();
 
-if("serviceWorker" in navigator) navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+if("serviceWorker" in navigator)navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
 </script>
 </body>
 </html>
