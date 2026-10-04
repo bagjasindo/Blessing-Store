@@ -1,9 +1,9 @@
-const CACHE="blessing-data-v18";
+const CACHE="blessing-data-v19";
 const CORE_ASSETS=[
   "./index.html",
   "./manifest.webmanifest?v=12",
   "./icon.svg?v=12",
-  "./logo-blessing.svg?v=12"
+  "./logo-blessing.svg?v=19"
 ];
 
 self.addEventListener("message",event=>{
