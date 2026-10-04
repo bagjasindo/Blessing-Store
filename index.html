@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Daftar Listrik Pelanggan</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <style>
+    :root{--bg:#0f172a;--panel:#111827;--panel2:#1e293b;--line:#334155;--text:#f8fafc;--muted:#94a3b8;--accent:#38bdf8;--good:#22c55e;--danger:#ef4444}
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#0f172a,#111827);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
+    .app{max-width:760px;margin:0 auto;padding:18px 14px 36px}
+    .head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}
+    h1{font-size:24px;line-height:1.15;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:5px}
+    .pill{background:#0ea5e922;border:1px solid #0ea5e944;color:#7dd3fc;border-radius:999px;padding:6px 10px;font-size:12px;white-space:nowrap}
+    .controls{display:grid;gap:10px;grid-template-columns:1fr 150px;margin-bottom:10px}
+    input,select{width:100%;border:1px solid var(--line);background:#0b1220;color:white;border-radius:12px;padding:13px 14px;font-size:15px;outline:none}
+    input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px #38bdf822}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin:10px 0 12px;gap:10px}
+    .count{color:var(--muted);font-size:13px}.btn{border:0;border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer}
+    .btn-add{background:var(--accent);color:#082f49}.list{display:grid;gap:10px}
+    .card{background:#111827;border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:0 10px 30px #0002}
+    .row-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .name{font-size:17px;font-weight:800;line-height:1.25}.cat{color:#7dd3fc;font-size:12px;margin-top:4px}
+    .numrow{display:flex;align-items:center;gap:10px;margin-top:12px}.number{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:18px;font-weight:800;letter-spacing:.03em;word-break:break-all;flex:1}
+    .copy{background:var(--accent);color:#082f49}.copy.done{background:var(--good);color:white}
+    .menu{background:#1e293b;color:#cbd5e1;border:1px solid #334155;padding:8px 10px}
+    .empty{color:var(--muted);text-align:center;padding:36px 8px}
+    dialog{border:1px solid var(--line);border-radius:16px;background:#111827;color:white;width:min(92vw,480px);padding:0}
+    dialog::backdrop{background:#0008}.dlg{padding:18px}.dlg h2{margin:0 0 14px;font-size:20px}.field{margin:10px 0}.field label{display:block;color:#cbd5e1;font-size:12px;margin-bottom:6px}
+    .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;flex-wrap:wrap}.btn-secondary{background:#334155;color:#e2e8f0}.btn-danger{background:var(--danger);color:white}.btn-save{background:var(--accent);color:#082f49}
+    .note{margin-top:16px;color:#64748b;font-size:11px;text-align:center}
+    @media(max-width:560px){.controls{grid-template-columns:1fr}.app{padding-left:12px;padding-right:12px}.number{font-size:17px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="head">
+    <div><h1>Daftar Listrik Pelanggan</h1><div class="sub">Cari nama atau nomor, lalu tekan Copy.</div></div>
+    <div id="allCount" class="pill">0 data</div>
+  </div>
+
+  <div class="controls">
+    <input id="search" type="search" placeholder="Cari nama / nomor..." autocomplete="off" />
+    <select id="category">
+      <option value="">Semua kategori</option>
+      <option value="Token Listrik">Token Listrik</option>
+      <option value="Listrik Bulanan">Listrik Bulanan</option>
+    </select>
+  </div>
+
+  <div class="toolbar">
+    <div id="shownCount" class="count"></div>
+    <button class="btn btn-add" id="addBtn">+ Tambah</button>
+  </div>
+
+  <div id="list" class="list"></div>
+  <div id="empty" class="empty" hidden>Data tidak ditemukan.</div>
+  <div class="note">Data edit/tambah di HP tersimpan di perangkat ini.</div>
+</div>
+
+<dialog id="editor">
+  <form method="dialog" class="dlg" id="editorForm">
+    <h2 id="editorTitle">Tambah Data</h2>
+    <div class="field"><label>Kategori</label><select id="editCategory"><option>Token Listrik</option><option>Listrik Bulanan</option></select></div>
+    <div class="field"><label>Nama pelanggan</label><input id="editName" required /></div>
+    <div class="field"><label>Nomor / ID pelanggan</label><input id="editNumber" inputmode="numeric" required /></div>
+    <div class="actions">
+      <button type="button" class="btn btn-danger" id="deleteBtn" hidden>Hapus</button>
+      <button type="button" class="btn btn-secondary" id="cancelBtn">Batal</button>
+      <button type="submit" class="btn btn-save">Simpan</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+const SEED = [
+["Token Listrik","AHDI","86250499794"],["Token Listrik","CAHYA","32011934299"],["Token Listrik","EDY RASMUN","14337515309"],["Token Listrik","ENDRI SUSANTO","45091275128"],["Token Listrik","JANI (KONTRAKAN)","14356558115"],["Token Listrik","ANAH RIANAH","86057283987"],["Token Listrik","ATMADJA","56130745856"],["Token Listrik","OSAD","56130745435"],["Token Listrik","EHAN JUHANA","32008963087"],["Token Listrik","KOMANDO UTAMA ( BARNA )","14298102949"],["Token Listrik","SRI BUDIARTI","32001014615"],["Token Listrik","NINING SUHERNI","32004034032"],["Token Listrik","KASDI","45045746745"],["Token Listrik","SUALI CIBUNAR","14434186236"],["Token Listrik","JAJA SUKANDA","32011870436"],["Token Listrik","RUMDIN AL-mu2 14","45052691479"],["Token Listrik","RONI FIRMANSYAH","56801698533"],["Token Listrik","SUHANA","56130745435"],["Token Listrik","LILISUALI (CIBUNAR)","14434186236"],["Token Listrik","MOHAMAD ADITIA","14401374138"],["Token Listrik","MULYANA","45095302456"],["Token Listrik","Maman Aca/AANG MAKMUR","86042638410"],["Token Listrik","JUDIN","14229609764"],["Token Listrik","POS KAMLING","32124860944"],["Token Listrik","NANAN GUNADI","56220334934"],["Token Listrik","MAMAN SUHERMAN","45091290911"],["Token Listrik","ENDANG SUHENDAR","45091275102"],["Token Listrik","UMIYATI","45050328868"],["Token Listrik","HERNI A ADANG","86037843249"],
+["Listrik Bulanan","EMOH","533710089257"],["Listrik Bulanan","NENO SUYANO","533710123768"],["Listrik Bulanan","RUSKANA","533710148926"],["Listrik Bulanan","JAJAI","533710256409"],["Listrik Bulanan","AGUS SUPARMAN ( CEU TITI)","533710316890"],["Listrik Bulanan","ARJA","533710058225"],["Listrik Bulanan","Langgar Nurul yakin","533710189687"],["Listrik Bulanan","KASDJA","533710046558"],["Listrik Bulanan","RADIATMAN / MAMAN ACA","533710300950"],["Listrik Bulanan","SUDINTA","533710179909"],["Listrik Bulanan","SUMARJA","533710046192"],["Listrik Bulanan","SUHARMAN","533710265186"],["Listrik Bulanan","ANDI JUANDI","533710246051"],["Listrik Bulanan","URIP","533710123750"],["Listrik Bulanan","KASMINAH IMING / WA ETI KARIM","533710046168"],["Listrik Bulanan","PENDI","533710148784"],["Listrik Bulanan","AHDA","533710046359"],["Listrik Bulanan","AMBARI","533710046184"],["Listrik Bulanan","MARKUNAH","533710156380"],["Listrik Bulanan","SAPRI","533710086795"],["Listrik Bulanan","NANANG KUSNADI","533710123792"],["Listrik Bulanan","SATINAH","533710046221"],["Listrik Bulanan","SALEH","533710271519"],["Listrik Bulanan","YATNO","533710123735"],["Listrik Bulanan","UU UNDANA","533710321321"],["Listrik Bulanan","SARMIN","533710058170"],["Listrik Bulanan","RUHIMAN SUDINTA (NIA)","533710086787"],["Listrik Bulanan","RASDJA","533710268118"],["Listrik Bulanan","KAMSURI","533710184773"],["Listrik Bulanan","PERNATA AMAN (WA EMIN)","533710086761"],["Listrik Bulanan","SASTRA","533710148153"],["Listrik Bulanan","SAMAD","533710046326"],["Listrik Bulanan","ALENTI","533710271099"],["Listrik Bulanan","JIRAH","533710091304"],["Listrik Bulanan","AHMAD SALIM","533710093684"],["Listrik Bulanan","DEDDI KUSWANDI","533711076463"],["Listrik Bulanan","WASJO","533710325631"]
+].map((x,i)=>({id:"seed-"+i,category:x[0],name:x[1],number:x[2]}));
+
+const KEY="blessing-store-data-pelanggan-v1";
+let data = load();
+let editingId = null;
+
+function load(){
+  try{const v=localStorage.getItem(KEY); if(v) return JSON.parse(v);}catch(e){}
+  return structuredClone(SEED);
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+
+const list=document.getElementById("list"), search=document.getElementById("search"), category=document.getElementById("category");
+const editor=document.getElementById("editor"), form=document.getElementById("editorForm"), editCategory=document.getElementById("editCategory"), editName=document.getElementById("editName"), editNumber=document.getElementById("editNumber"), deleteBtn=document.getElementById("deleteBtn");
+
+function render(){
+  const q=search.value.trim().toLowerCase(), c=category.value;
+  const shown=data.filter(x=>(!c||x.category===c)&&(!q||x.name.toLowerCase().includes(q)||x.number.includes(q)));
+  document.getElementById("allCount").textContent=data.length+" data";
+  document.getElementById("shownCount").textContent="Menampilkan "+shown.length+" data";
+  list.innerHTML="";
+  document.getElementById("empty").hidden=shown.length!==0;
+  for(const x of shown){
+    const el=document.createElement("div"); el.className="card";
+    el.innerHTML='<div class="row-top"><div><div class="name">'+esc(x.name)+'</div><div class="cat">'+esc(x.category)+'</div></div><button class="btn menu">Edit</button></div><div class="numrow"><div class="number">'+esc(x.number)+'</div><button class="btn copy">Copy</button></div>';
+    const [edit,copy]=el.querySelectorAll("button");
+    edit.onclick=()=>openEditor(x);
+    copy.onclick=async()=>{try{await navigator.clipboard.writeText(x.number)}catch(e){const t=document.createElement("textarea");t.value=x.number;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove()}copy.textContent="Disalin";copy.classList.add("done");setTimeout(()=>{copy.textContent="Copy";copy.classList.remove("done")},1000)};
+    list.appendChild(el);
+  }
+}
+function openEditor(x=null){
+  editingId=x?.id??null;
+  document.getElementById("editorTitle").textContent=x?"Edit Data":"Tambah Data";
+  editCategory.value=x?.category??"Token Listrik"; editName.value=x?.name??""; editNumber.value=x?.number??"";
+  deleteBtn.hidden=!x; editor.showModal(); setTimeout(()=>editName.focus(),50);
+}
+form.addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=editName.value.trim(), number=editNumber.value.trim();
+  if(!name||!number)return;
+  if(editingId){const x=data.find(v=>v.id===editingId); if(x){x.category=editCategory.value;x.name=name;x.number=number}}
+  else data.push({id:"u-"+Date.now(),category:editCategory.value,name,number});
+  save(); editor.close(); render();
+});
+deleteBtn.onclick=()=>{if(!editingId)return;if(confirm("Hapus data ini?")){data=data.filter(x=>x.id!==editingId);save();editor.close();render()}};
+document.getElementById("cancelBtn").onclick=()=>editor.close();
+document.getElementById("addBtn").onclick=()=>openEditor();
+search.oninput=render; category.onchange=render; render();
+
+if("serviceWorker" in navigator) navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+</script>
+</body>
+</html>
