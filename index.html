@@ -84,12 +84,19 @@
     .master-text{min-width:0}
     .master-text strong{display:block;font-size:var(--fs-md);font-weight:800}
     .master-text span{display:block;margin-top:1px;color:var(--muted);font-size:var(--fs-xs);line-height:1.3}
-    .master-add{
-      flex:0 0 auto;height:36px;padding:0 11px;border:0;border-radius:9px;
-      background:var(--brand);color:#fff;display:flex;align-items:center;gap:6px;
+    .master-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+    .master-add,.master-backup{
+      height:36px;padding:0 11px;border-radius:9px;display:flex;align-items:center;gap:6px;
       font-size:var(--fs-sm);font-weight:750;
     }
-    .master-add svg{width:16px;height:16px}
+    .master-add{border:0;background:var(--brand);color:#fff}
+    .master-backup{border:1px solid var(--line);background:#f3f8f7;color:#4f6a66}
+    .master-add svg,.master-backup svg{width:16px;height:16px}
+    @media(max-width:480px){
+      .master-box{align-items:flex-start}
+      .master-actions{flex-direction:column;align-items:stretch}
+      .master-add,.master-backup{justify-content:center;min-width:112px}
+    }
 
     /* Dedicated add/edit page */
     .home-only.hidden{display:none!important}
@@ -275,10 +282,16 @@
           <strong>Master Data</strong>
           <span>Tambah atau edit pelanggan di perangkat ini</span>
         </div>
-        <button class="master-add" id="addBtn">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-          Tambah Data
-        </button>
+        <div class="master-actions">
+          <button class="master-backup" id="backupExcelBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Backup Excel
+          </button>
+          <button class="master-add" id="addBtn">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+            Tambah Data
+          </button>
+        </div>
       </div>
 
 
@@ -459,6 +472,70 @@ function updateStats(){}
 function showToast(msg="Nomor disalin"){
   const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(showToast.t);showToast.t=setTimeout(()=>t.classList.remove("show"),1200)
 }
+function excelXmlEscape(value){
+  return String(value).replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
+}
+function backupExcel(){
+  try{
+    const rows=[...data].sort((a,b)=>{
+      const byCat=a.category.localeCompare(b.category,"id");
+      return byCat||a.name.localeCompare(b.name,"id");
+    });
+    const now=new Date();
+    const pad=n=>String(n).padStart(2,"0");
+    const stamp=now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate())+"_"+pad(now.getHours())+"-"+pad(now.getMinutes());
+
+    const rowXml=rows.map((x,i)=>`<Row>
+      <Cell><Data ss:Type="Number">${i+1}</Data></Cell>
+      <Cell><Data ss:Type="String">${excelXmlEscape(categoryLabel(x.category))}</Data></Cell>
+      <Cell><Data ss:Type="String">${excelXmlEscape(x.name)}</Data></Cell>
+      <Cell><Data ss:Type="String">${excelXmlEscape(x.number)}</Data></Cell>
+    </Row>`).join("");
+
+    const xml=`<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+ <Styles>
+  <Style ss:ID="Header">
+   <Font ss:Bold="1"/>
+   <Interior ss:Color="#DDF3F0" ss:Pattern="Solid"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Data Pelanggan">
+  <Table>
+   <Column ss:Width="45"/>
+   <Column ss:Width="120"/>
+   <Column ss:Width="210"/>
+   <Column ss:Width="150"/>
+   <Row>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">NO</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">KATEGORI</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">NAMA PELANGGAN</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">NOMOR / ID PELANGGAN</Data></Cell>
+   </Row>
+   ${rowXml}
+  </Table>
+ </Worksheet>
+</Workbook>`;
+
+    const blob=new Blob([xml],{type:"application/vnd.ms-excel;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download="Blessing_Store_Backup_"+stamp+".xls";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+    showToast("Backup Excel dibuat");
+  }catch(e){
+    console.error("Backup Excel gagal:",e);
+    showToast("Backup Excel gagal");
+  }
+}
 function render(){
   const q=search.value.trim().toLowerCase();
   const shown=data.filter(x=>(!activeCategory||x.category===activeCategory)&&(!q||x.name.toLowerCase().includes(q)||x.number.includes(q)))
@@ -516,6 +593,7 @@ deleteBtn.onclick=()=>{
 $("cancelBtn").onclick=()=>{editingId=null;showHome()};
 $("backBtn").onclick=()=>{editingId=null;showHome()};
 $("addBtn").onclick=()=>openEditor();
+$("backupExcelBtn").onclick=backupExcel;
 $("clearSearch").onclick=()=>{search.value="";search.focus();render()};
 search.oninput=render;
 document.querySelectorAll(".service").forEach(btn=>btn.onclick=()=>{
@@ -533,7 +611,7 @@ if("serviceWorker" in navigator){
     location.reload();
   });
   window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("./service-worker.js?v=17",{scope:"./"}).then(reg=>{
+    navigator.serviceWorker.register("./service-worker.js?v=18",{scope:"./"}).then(reg=>{
       reg.update().catch(()=>{});
       if(reg.waiting)reg.waiting.postMessage({type:"SKIP_WAITING"});
     }).catch(()=>{});
