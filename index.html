@@ -99,26 +99,23 @@
     .footnote{text-align:center;color:#5f738c;font-size:10px;margin:18px 0 0}
 
 
-    dialog{
-      width:min(94vw,520px);border:0;border-radius:24px 24px 0 0;background:#ffffff;color:#173331;padding:0;
-      position:fixed;bottom:0;top:auto;margin:0 auto;max-height:82vh;box-shadow:0 -24px 70px rgba(0,0,0,.45)
-    }
-    dialog::backdrop{background:rgba(2,8,18,.78);backdrop-filter:blur(4px)}
-    .sheet{padding:10px 18px 22px}.handle{width:44px;height:5px;border-radius:999px;background:#334965;margin:0 auto 16px}
-    .sheethead{display:flex;justify-content:space-between;align-items:center;gap:12px}
-    .sheet h2{margin:0;font-size:20px}.sheet p{margin:4px 0 0;color:var(--muted);font-size:12px}
-    .field{margin-top:15px}.field label{display:block;color:#b8c7d9;font-size:11px;font-weight:800;margin-bottom:7px;letter-spacing:.03em}
+    .editor-panel{display:none;margin-top:10px;border:1px solid var(--line);border-radius:16px;background:#ffffff;box-shadow:0 6px 18px rgba(20,80,72,.06)}
+    .editor-panel.show{display:block}
+    .sheet{padding:14px}
+    .sheethead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:2px}
+    .sheet h2{margin:0;font-size:16px}.sheet p{margin:3px 0 0;color:var(--muted);font-size:10.5px}
+    .field{margin-top:12px}.field label{display:block;color:#728985;font-size:10px;font-weight:800;margin-bottom:6px;letter-spacing:.04em}
     .field input{
-      width:100%;height:48px;border-radius:14px;border:1px solid var(--line);background:#f8fbfa;color:#173331;padding:0 13px;outline:none
+      width:100%;height:45px;border-radius:12px;border:1px solid var(--line);background:#f8fbfa;color:#173331;padding:0 12px;outline:none;font-size:13px
     }
-    .category-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-height:164px;overflow:auto;padding:1px}
-    .category-picker button{min-height:40px;border:1px solid var(--line);border-radius:11px;background:#f8fbfa;color:#56706c;font-size:10.5px;font-weight:800;padding:6px}
-    .category-picker button.active{background:#e3f6f3;border-color:#49b9ae;color:#08766c;box-shadow:0 0 0 2px rgba(15,156,143,.08)}
-    @media(max-width:370px){.category-picker{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    .actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
-    .btn{height:48px;border-radius:14px;border:0;font-weight:900}
-    .secondary{background:#f1f6f5;color:#52716d;border:1px solid #30445f}.savebtn{background:#0f9c8f;color:#ffffff}
-    .danger{grid-column:1/-1;background:rgba(239,68,68,.12);color:#ff9494;border:1px solid rgba(239,68,68,.25);display:none}
+    .field input:focus{border-color:#0f9c8f;box-shadow:0 0 0 3px rgba(15,156,143,.08)}
+    .category-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-height:148px;overflow:auto;padding:1px}
+    .category-picker button{min-height:38px;border:1px solid var(--line);border-radius:10px;background:#f8fbfa;color:#56706c;font-size:10px;font-weight:800;padding:6px}
+    .category-picker button.active{background:#e3f6f3;border-color:#49b9ae;color:#08766c;box-shadow:0 0 0 2px rgba(15,156,143,.07)}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+    .btn{height:44px;border-radius:12px;border:0;font-size:12px;font-weight:900}
+    .secondary{background:#f1f6f5;color:#52716d;border:1px solid var(--line)}.savebtn{background:#0f9c8f;color:#ffffff}
+    .danger{grid-column:1/-1;background:rgba(239,68,68,.08);color:#d74a4a;border:1px solid rgba(239,68,68,.22);display:none}
     .danger.show{display:block}
 
     .toast{
@@ -130,7 +127,6 @@
     @media(max-width:370px){.service-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.service{font-size:10px}}
     @media(min-width:700px){
       .shell{padding-top:20px}.list{grid-template-columns:1fr 1fr}.hero{padding:18px}.service-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
-      dialog{border-radius:24px;bottom:auto;top:50%;transform:translateY(-50%)}
     }
   </style>
 </head>
@@ -164,15 +160,65 @@
         <button class="service" data-cat="IndiHome"><span class="svc-ico"><svg viewBox="0 0 24 24" fill="none"><path d="m3 11 9-7 9 7v9H8v-6h8v6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 10.5a6 6 0 0 1 8 0M10 13a3 3 0 0 1 4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>IndiHome</span></button>
       </div>
 
-
+      <div class="master-box">
         <div class="master-text">
           <strong>Master Data</strong>
-          <span>Tambah pelanggan baru ke perangkat ini</span>
+          <span>Tambah atau edit pelanggan di perangkat ini</span>
         </div>
         <button class="master-add" id="addBtn">
           <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
           Tambah Data
         </button>
+      </div>
+
+      <section class="editor-panel" id="editor">
+        <form class="sheet" id="editorForm">
+          <div class="sheethead">
+            <div>
+              <h2 id="editorTitle">Tambah Pelanggan</h2>
+              <p>Isi data lalu simpan. Form tetap berada di halaman ini.</p>
+            </div>
+          </div>
+          <div class="field">
+            <label>KATEGORI</label>
+            <input type="hidden" id="editCategory" value="Pulsa" />
+            <div class="category-picker" id="categoryPicker">
+              <button type="button" data-value="Pulsa">Pulsa</button>
+              <button type="button" data-value="Paket Data">Paket Data</button>
+              <button type="button" data-value="Listrik Token">Token PLN</button>
+              <button type="button" data-value="Listrik Bulanan">PLN Bulanan</button>
+              <button type="button" data-value="BPJS">BPJS</button>
+              <button type="button" data-value="DANA">DANA</button>
+              <button type="button" data-value="GoPay">GoPay</button>
+              <button type="button" data-value="OVO">OVO</button>
+              <button type="button" data-value="ShopeePay">ShopeePay</button>
+              <button type="button" data-value="PDAM">PDAM</button>
+              <button type="button" data-value="IndiHome">IndiHome</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>NAMA PELANGGAN</label>
+            <input id="editName" placeholder="Contoh: AHDI" required />
+          </div>
+          <div class="field">
+            <label>NOMOR / ID PELANGGAN</label>
+            <input id="editNumber" inputmode="numeric" placeholder="Masukkan nomor" required />
+          </div>
+          <div class="actions">
+            <button type="button" class="btn secondary" id="cancelBtn">Batal</button>
+            <button type="submit" class="btn savebtn">Simpan</button>
+            <button type="button" class="btn danger" id="deleteBtn">Hapus Data</button>
+          </div>
+        </form>
+      </section>
+
+      <div class="search-wrap">
+        <label class="search-label" for="search">Cari Pelanggan</label>
+        <div class="searchbox">
+          <svg viewBox="0 0 24 24" fill="none"><path d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="search" type="search" placeholder="Nama atau nomor pelanggan..." autocomplete="off" />
+          <button id="clearSearch" class="clear" aria-label="Hapus pencarian">×</button>
+        </div>
       </div>
     </section>
 
@@ -189,47 +235,6 @@
     <div class="footnote">Perubahan Tambah / Edit / Hapus tersimpan lokal di HP ini.</div>
   </main>
 
-  <dialog id="editor">
-    <form method="dialog" class="sheet" id="editorForm">
-      <div class="handle"></div>
-      <div class="sheethead">
-        <div>
-          <h2 id="editorTitle">Tambah Pelanggan</h2>
-          <p>Data disimpan di perangkat ini.</p>
-        </div>
-      </div>
-      <div class="field">
-        <label>KATEGORI</label>
-        <input type="hidden" id="editCategory" value="Pulsa" />
-        <div class="category-picker" id="categoryPicker">
-          <button type="button" data-value="Pulsa">Pulsa</button>
-          <button type="button" data-value="Paket Data">Paket Data</button>
-          <button type="button" data-value="Listrik Token">Token PLN</button>
-          <button type="button" data-value="Listrik Bulanan">PLN Bulanan</button>
-          <button type="button" data-value="BPJS">BPJS</button>
-          <button type="button" data-value="DANA">DANA</button>
-          <button type="button" data-value="GoPay">GoPay</button>
-          <button type="button" data-value="OVO">OVO</button>
-          <button type="button" data-value="ShopeePay">ShopeePay</button>
-          <button type="button" data-value="PDAM">PDAM</button>
-          <button type="button" data-value="IndiHome">IndiHome</button>
-        </div>
-      </div>
-      <div class="field">
-        <label>NAMA PELANGGAN</label>
-        <input id="editName" placeholder="Contoh: AHDI" required />
-      </div>
-      <div class="field">
-        <label>NOMOR / ID PELANGGAN</label>
-        <input id="editNumber" inputmode="numeric" placeholder="Masukkan nomor" required />
-      </div>
-      <div class="actions">
-        <button type="button" class="btn secondary" id="cancelBtn">Batal</button>
-        <button type="submit" class="btn savebtn">Simpan</button>
-        <button type="button" class="btn danger" id="deleteBtn">Hapus Data</button>
-      </div>
-    </form>
-  </dialog>
 
   <div id="toast" class="toast">Nomor disalin</div>
 
@@ -305,7 +310,7 @@ function openEditor(x=null){
   $("editorTitle").textContent=x?"Edit Pelanggan":"Tambah Pelanggan";
   setEditCategory(x?.category??"Pulsa");editName.value=x?.name??"";editNumber.value=x?.number??"";
   deleteBtn.classList.toggle("show",!!x);
-  editor.showModal();setTimeout(()=>editName.focus(),80)
+  editor.classList.add("show");editor.scrollIntoView({behavior:"smooth",block:"nearest"});setTimeout(()=>editName.focus(),80)
 }
 form.addEventListener("submit",e=>{
   e.preventDefault();
@@ -315,15 +320,15 @@ form.addEventListener("submit",e=>{
     const x=data.find(v=>v.id===editingId);
     if(x){x.category=editCategory.value;x.name=name;x.number=number}
   }else data.push({id:"u-"+Date.now(),category:editCategory.value,name,number});
-  save();editor.close();render();showToast("Data tersimpan")
+  save();editor.classList.remove("show");render();showToast("Data tersimpan")
 });
 deleteBtn.onclick=()=>{
   if(!editingId)return;
   if(confirm("Hapus data pelanggan ini?")){
-    data=data.filter(x=>x.id!==editingId);save();editor.close();render();showToast("Data dihapus")
+    data=data.filter(x=>x.id!==editingId);save();editor.classList.remove("show");render();showToast("Data dihapus")
   }
 };
-$("cancelBtn").onclick=()=>editor.close();
+$("cancelBtn").onclick=()=>{editor.classList.remove("show");editingId=null};
 $("addBtn").onclick=()=>openEditor();
 $("clearSearch").onclick=()=>{search.value="";search.focus();render()};
 search.oninput=render;
