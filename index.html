@@ -61,10 +61,10 @@
     .searchbox input:focus{border-color:#238ec1;box-shadow:0 0 0 3px rgba(41,182,246,.12)}
     .clear{position:absolute;right:8px;top:8px;width:36px;height:36px;border:0;border-radius:11px;background:transparent;color:#8ba0b9;font-size:20px;display:none}
     .clear.show{display:block}
-    .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}
+    .tabs{display:flex;gap:7px;margin-top:9px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
     .tab{
-      border:1px solid var(--line);background:#0e1a2d;color:#9cafc5;border-radius:13px;
-      min-height:40px;padding:8px 7px;font-size:12px;font-weight:700
+      flex:0 0 auto;border:1px solid var(--line);background:#0e1a2d;color:#9cafc5;border-radius:13px;
+      min-height:40px;padding:8px 14px;font-size:12px;font-weight:700;white-space:nowrap
     }
     .tab.active{background:linear-gradient(180deg,#123657,#102d49);border-color:#1e6693;color:#dff5ff;box-shadow:inset 0 0 0 1px rgba(56,189,248,.05)}
 
@@ -144,14 +144,14 @@
         </div>
         <div>
           <div class="eyebrow">Blessing Store</div>
-          <h1>Data Pelanggan Listrik</h1>
+          <h1>Master Data Pelanggan</h1>
         </div>
       </div>
-      <p class="hero-sub">Cari pelanggan dengan cepat, lalu salin nomor token atau ID listrik langsung dari HP.</p>
+      <p class="hero-sub">Kelola data pelanggan yang berkaitan dengan listrik, BPJS, dan dompet digital langsung dari HP.</p>
       <div class="stats">
         <div class="stat"><b id="statAll">0</b><span>Total data</span></div>
-        <div class="stat"><b id="statToken">0</b><span>Token listrik</span></div>
-        <div class="stat"><b id="statMonthly">0</b><span>Listrik bulanan</span></div>
+        <div class="stat"><b id="statToken">0</b><span>Token</span></div>
+        <div class="stat"><b id="statMonthly">0</b><span>Bulanan</span></div>
       </div>
     </section>
 
@@ -161,10 +161,13 @@
         <input id="search" type="search" placeholder="Cari nama atau nomor..." autocomplete="off" />
         <button id="clearSearch" class="clear" aria-label="Hapus pencarian">×</button>
       </div>
-      <div class="tabs" role="tablist">
+      <div class="tabs tabs-scroll" role="tablist">
         <button class="tab active" data-cat="">Semua</button>
-        <button class="tab" data-cat="Token Listrik">Token</button>
         <button class="tab" data-cat="Listrik Bulanan">Bulanan</button>
+        <button class="tab" data-cat="Listrik Token">Token</button>
+        <button class="tab" data-cat="BPJS">BPJS</button>
+        <button class="tab" data-cat="DANA">DANA</button>
+        <button class="tab" data-cat="GoPay">GoPay</button>
       </div>
     </section>
 
@@ -198,8 +201,11 @@
       <div class="field">
         <label>KATEGORI</label>
         <select id="editCategory">
-          <option>Token Listrik</option>
           <option>Listrik Bulanan</option>
+          <option>Listrik Token</option>
+          <option>BPJS</option>
+          <option>DANA</option>
+          <option>GoPay</option>
         </select>
       </div>
       <div class="field">
@@ -222,8 +228,9 @@
 
 <script>
 const SEED = [
-["Token Listrik","AHDI","86250499794"],["Token Listrik","CAHYA","32011934299"],["Token Listrik","EDY RASMUN","14337515309"],["Token Listrik","ENDRI SUSANTO","45091275128"],["Token Listrik","JANI (KONTRAKAN)","14356558115"],["Token Listrik","ANAH RIANAH","86057283987"],["Token Listrik","ATMADJA","56130745856"],["Token Listrik","OSAD","56130745435"],["Token Listrik","EHAN JUHANA","32008963087"],["Token Listrik","KOMANDO UTAMA ( BARNA )","14298102949"],["Token Listrik","SRI BUDIARTI","32001014615"],["Token Listrik","NINING SUHERNI","32004034032"],["Token Listrik","KASDI","45045746745"],["Token Listrik","SUALI CIBUNAR","14434186236"],["Token Listrik","JAJA SUKANDA","32011870436"],["Token Listrik","RUMDIN AL-mu2 14","45052691479"],["Token Listrik","RONI FIRMANSYAH","56801698533"],["Token Listrik","SUHANA","56130745435"],["Token Listrik","LILISUALI (CIBUNAR)","14434186236"],["Token Listrik","MOHAMAD ADITIA","14401374138"],["Token Listrik","MULYANA","45095302456"],["Token Listrik","Maman Aca/AANG MAKMUR","86042638410"],["Token Listrik","JUDIN","14229609764"],["Token Listrik","POS KAMLING","32124860944"],["Token Listrik","NANAN GUNADI","56220334934"],["Token Listrik","MAMAN SUHERMAN","45091290911"],["Token Listrik","ENDANG SUHENDAR","45091275102"],["Token Listrik","UMIYATI","45050328868"],["Token Listrik","HERNI A ADANG","86037843249"],
-["Listrik Bulanan","EMOH","533710089257"],["Listrik Bulanan","NENO SUYANO","533710123768"],["Listrik Bulanan","RUSKANA","533710148926"],["Listrik Bulanan","JAJAI","533710256409"],["Listrik Bulanan","AGUS SUPARMAN ( CEU TITI)","533710316890"],["Listrik Bulanan","ARJA","533710058225"],["Listrik Bulanan","Langgar Nurul yakin","533710189687"],["Listrik Bulanan","KASDJA","533710046558"],["Listrik Bulanan","RADIATMAN / MAMAN ACA","533710300950"],["Listrik Bulanan","SUDINTA","533710179909"],["Listrik Bulanan","SUMARJA","533710046192"],["Listrik Bulanan","SUHARMAN","533710265186"],["Listrik Bulanan","ANDI JUANDI","533710246051"],["Listrik Bulanan","URIP","533710123750"],["Listrik Bulanan","KASMINAH IMING / WA ETI KARIM","533710046168"],["Listrik Bulanan","PENDI","533710148784"],["Listrik Bulanan","AHDA","533710046359"],["Listrik Bulanan","AMBARI","533710046184"],["Listrik Bulanan","MARKUNAH","533710156380"],["Listrik Bulanan","SAPRI","533710086795"],["Listrik Bulanan","NANANG KUSNADI","533710123792"],["Listrik Bulanan","SATINAH","533710046221"],["Listrik Bulanan","SALEH","533710271519"],["Listrik Bulanan","YATNO","533710123735"],["Listrik Bulanan","UU UNDANA","533710321321"],["Listrik Bulanan","SARMIN","533710058170"],["Listrik Bulanan","RUHIMAN SUDINTA (NIA)","533710086787"],["Listrik Bulanan","RASDJA","533710268118"],["Listrik Bulanan","KAMSURI","533710184773"],["Listrik Bulanan","PERNATA AMAN (WA EMIN)","533710086761"],["Listrik Bulanan","SASTRA","533710148153"],["Listrik Bulanan","SAMAD","533710046326"],["Listrik Bulanan","ALENTI","533710271099"],["Listrik Bulanan","JIRAH","533710091304"],["Listrik Bulanan","AHMAD SALIM","533710093684"],["Listrik Bulanan","DEDDI KUSWANDI","533711076463"],["Listrik Bulanan","WASJO","533710325631"]
+["Listrik Token","AHDI","86250499794"],["Listrik Token","CAHYA","32011934299"],["Listrik Token","EDY RASMUN","14337515309"],["Listrik Token","ENDRI SUSANTO","45091275128"],["Listrik Token","JANI (KONTRAKAN)","14356558115"],["Listrik Token","ANAH RIANAH","86057283987"],["Listrik Token","ATMADJA","56130745856"],["Listrik Token","OSAD","56130745435"],["Listrik Token","EHAN JUHANA","32008963087"],["Listrik Token","KOMANDO UTAMA ( BARNA )","14298102949"],["Listrik Token","SRI BUDIARTI","32001014615"],["Listrik Token","NINING SUHERNI","32004034032"],["Listrik Token","KASDI","45045746745"],["Listrik Token","SUALI CIBUNAR","14434186236"],["Listrik Token","JAJA SUKANDA","32011870436"],["Listrik Token","RUMDIN AL-mu2 14","45052691479"],["Listrik Token","RONI FIRMANSYAH","56801698533"],["Listrik Token","SUHANA","56130745435"],["Listrik Token","LILISUALI (CIBUNAR)","14434186236"],["Listrik Token","MOHAMAD ADITIA","14401374138"],["Listrik Token","MULYANA","45095302456"],["Listrik Token","Maman Aca/AANG MAKMUR","86042638410"],["Listrik Token","JUDIN","14229609764"],["Listrik Token","POS KAMLING","32124860944"],["Listrik Token","NANAN GUNADI","56220334934"],["Listrik Token","MAMAN SUHERMAN","45091290911"],["Listrik Token","ENDANG SUHENDAR","45091275102"],["Listrik Token","UMIYATI","45050328868"],["Listrik Token","HERNI A ADANG","86037843249"],
+["Listrik Bulanan","EMOH","533710089257"],["Listrik Bulanan","NENO SUYANO","533710123768"],["Listrik Bulanan","RUSKANA","533710148926"],["Listrik Bulanan","JAJAI","533710256409"],["Listrik Bulanan","AGUS SUPARMAN ( CEU TITI)","533710316890"],["Listrik Bulanan","ARJA","533710058225"],["Listrik Bulanan","Langgar Nurul yakin","533710189687"],["Listrik Bulanan","KASDJA","533710046558"],["Listrik Bulanan","RADIATMAN / MAMAN ACA","533710300950"],["Listrik Bulanan","SUDINTA","533710179909"],["Listrik Bulanan","SUMARJA","533710046192"],["Listrik Bulanan","SUHARMAN","533710265186"],["Listrik Bulanan","ANDI JUANDI","533710246051"],["Listrik Bulanan","URIP","533710123750"],["Listrik Bulanan","KASMINAH IMING / WA ETI KARIM","533710046168"],["Listrik Bulanan","PENDI","533710148784"],["Listrik Bulanan","AHDA","533710046359"],["Listrik Bulanan","AMBARI","533710046184"],["Listrik Bulanan","MARKUNAH","533710156380"],["Listrik Bulanan","SAPRI","533710086795"],["Listrik Bulanan","NANANG KUSNADI","533710123792"],["Listrik Bulanan","SATINAH","533710046221"],["Listrik Bulanan","SALEH","533710271519"],["Listrik Bulanan","YATNO","533710123735"],["Listrik Bulanan","UU UNDANA","533710321321"],["Listrik Bulanan","SARMIN","533710058170"],["Listrik Bulanan","RUHIMAN SUDINTA (NIA)","533710086787"],["Listrik Bulanan","RASDJA","533710268118"],["Listrik Bulanan","KAMSURI","533710184773"],["Listrik Bulanan","PERNATA AMAN (WA EMIN)","533710086761"],["Listrik Bulanan","SASTRA","533710148153"],["Listrik Bulanan","SAMAD","533710046326"],["Listrik Bulanan","ALENTI","533710271099"],["Listrik Bulanan","JIRAH","533710091304"],["Listrik Bulanan","AHMAD SALIM","533710093684"],["Listrik Bulanan","DEDDI KUSWANDI","533711076463"],["Listrik Bulanan","WASJO","533710325631"],
+["BPJS","MUKIN","03294522843"],["BPJS","KANIS","01267408462"]
 ].map((x,i)=>({id:"seed-"+i,category:x[0],name:x[1],number:x[2]}));
 
 const KEY="blessing-store-data-pelanggan-v1";
@@ -232,12 +239,26 @@ const $=id=>document.getElementById(id);
 const list=$("list"), search=$("search"), editor=$("editor"), form=$("editorForm");
 const editCategory=$("editCategory"),editName=$("editName"),editNumber=$("editNumber"),deleteBtn=$("deleteBtn");
 
-function load(){try{const x=localStorage.getItem(KEY);if(x)return JSON.parse(x)}catch(e){}return structuredClone(SEED)}
+function load(){
+  try{
+    const x=localStorage.getItem(KEY);
+    if(x){
+      const saved=JSON.parse(x).map(item=>({...item,category:item.category==="Token Listrik"?"Listrik Token":item.category}));
+      for(const seed of SEED){
+        if(seed.category==="BPJS" && !saved.some(v=>v.category==="BPJS" && v.name===seed.name && v.number===seed.number)){
+          saved.push(seed);
+        }
+      }
+      return saved;
+    }
+  }catch(e){}
+  return structuredClone(SEED);
+}
 function save(){localStorage.setItem(KEY,JSON.stringify(data))}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function updateStats(){
   $("statAll").textContent=data.length;
-  $("statToken").textContent=data.filter(x=>x.category==="Token Listrik").length;
+  $("statToken").textContent=data.filter(x=>x.category==="Listrik Token").length;
   $("statMonthly").textContent=data.filter(x=>x.category==="Listrik Bulanan").length;
 }
 function showToast(msg="Nomor disalin"){
@@ -274,7 +295,7 @@ function render(){
 function openEditor(x=null){
   editingId=x?.id??null;
   $("editorTitle").textContent=x?"Edit Pelanggan":"Tambah Pelanggan";
-  editCategory.value=x?.category??"Token Listrik";editName.value=x?.name??"";editNumber.value=x?.number??"";
+  editCategory.value=x?.category??"Listrik Bulanan";editName.value=x?.name??"";editNumber.value=x?.number??"";
   deleteBtn.classList.toggle("show",!!x);
   editor.showModal();setTimeout(()=>editName.focus(),80)
 }
