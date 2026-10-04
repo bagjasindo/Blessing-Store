@@ -2,7 +2,7 @@
   <rect width="862" height="155" fill="#ffffff"/>
   <g fill="#0c9588">
     <text x="5" y="110" font-family="Arial Black,Arial,Helvetica,sans-serif" font-size="86" font-weight="900" letter-spacing="-5">BLE</text>
-    <g transform="translate(186 7) scale(.73)">
+    <g transform="translate(155 7) scale(.73)">
       <path d="M76 13 L2 57 L2 131 L78 175 L112 154 L112 116 L49 75 L71 63 L75 81 L111 101 L112 34 Z
 M101 128 L102 129 L102 149 L88 158 L83 159 L82 158 L82 138 L94 130 Z
 M12 105 L15 104 L70 136 L72 159 L69 160 L14 128 L11 123 Z
@@ -10,8 +10,8 @@ M19 93 L34 83 L39 83 L93 114 L95 118 L75 128 L26 100 Z
 M83 28 L102 39 L101 83 L92 80 L82 73 Z
 M72 29 L71 51 L20 81 L12 82 L11 64 L14 60 L67 29 Z" fill="#0c9588" fill-rule="evenodd"/>
     </g>
-    <text x="276" y="110" font-family="Arial Black,Arial,Helvetica,sans-serif" font-size="86" font-weight="900" letter-spacing="-5">SING</text>
-    <rect x="550" y="4" width="302" height="112" rx="10"/>
+    <text x="246" y="110" font-family="Arial Black,Arial,Helvetica,sans-serif" font-size="86" font-weight="900" letter-spacing="-5">SING</text>
+    <rect x="520" y="4" width="332" height="112" rx="10"/>
   </g>
-  <text x="574" y="86" fill="#ffffff" font-family="Arial Black,Arial,Helvetica,sans-serif" font-size="58" font-weight="900" letter-spacing="0">STORE</text>
+  <text x="544" y="86" fill="#ffffff" font-family="Arial Black,Arial,Helvetica,sans-serif" font-size="58" font-weight="900" letter-spacing="0">STORE</text>
 </svg>
