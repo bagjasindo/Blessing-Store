@@ -1,18 +1,18 @@
 {
   "name": "Blessing Store",
   "short_name": "Blessing Store",
-  "start_url": "./",
+  "start_url": "./?pwa=12",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f7f6",
-  "theme_color": "#0f9c8f",
+  "background_color": "#ffffff",
+  "theme_color": "#0c9588",
   "description": "Master data pelanggan Blessing Store.",
   "icons": [
     {
-      "src": "./icon.svg",
+      "src": "./icon.svg?v=12",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
