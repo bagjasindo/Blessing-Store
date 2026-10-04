@@ -6,11 +6,12 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#0f9c8f" />
+  <meta name="theme-color" content="#0c9588" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Blessing Store • Data Pelanggan</title>
-  <link rel="manifest" href="./manifest.webmanifest?v=11" />
+  <link rel="manifest" href="./manifest.webmanifest?v=12" />
+  <link rel="icon" href="./icon.svg?v=12" type="image/svg+xml" />
   <style>
     :root{
       --bg:#f4f7f6; --panel:#ffffff; --panel-soft:#f8fbfa;
@@ -243,7 +244,7 @@
   <main class="shell">
     <section class="hero home-only">
       <div class="brandline">
-        <img class="brand-logo" src="./logo-blessing.svg?v=11" alt="Blessing Store" />
+        <img class="brand-logo" src="./logo-blessing.svg?v=12" alt="Blessing Store" />
         <h1 class="brand-title">Master Data Pelanggan Konter</h1>
       </div>
       <p class="hero-sub">Simpan nama dan nomor pelanggan berdasarkan jenis layanan. Cepat dicari, mudah disalin.</p>
@@ -490,7 +491,7 @@ if("serviceWorker" in navigator){
     location.reload();
   });
   window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("./service-worker.js?v=11",{scope:"./"}).then(reg=>{
+    navigator.serviceWorker.register("./service-worker.js?v=12",{scope:"./"}).then(reg=>{
       reg.update().catch(()=>{});
       if(reg.waiting)reg.waiting.postMessage({type:"SKIP_WAITING"});
     }).catch(()=>{});
