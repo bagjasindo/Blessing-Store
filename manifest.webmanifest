@@ -1,12 +1,18 @@
 {
-  "name": "Daftar Listrik Pelanggan",
-  "short_name": "Data Pelanggan",
+  "name": "Blessing Store",
+  "short_name": "Blessing Store",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
-  "description": "Daftar nomor listrik/token pelanggan Blessing Store.",
+  "background_color": "#f4f7f6",
+  "theme_color": "#0f9c8f",
+  "description": "Master data pelanggan Blessing Store.",
   "icons": [
-    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ]
 }
