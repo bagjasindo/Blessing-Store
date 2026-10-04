@@ -1,5 +1,5 @@
-const CACHE="blessing-data-v11";
-const ASSETS=["./","./index.html","./manifest.webmanifest","./icon.svg","./logo-blessing.svg"];
+const CACHE="blessing-data-v12";
+const ASSETS=["./","./index.html","./manifest.webmanifest?v=12","./icon.svg?v=12","./logo-blessing.svg?v=12"];
 
 self.addEventListener("message",event=>{
   if(event.data?.type==="SKIP_WAITING") self.skipWaiting();
