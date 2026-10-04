@@ -51,7 +51,7 @@
     .stat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);border-radius:15px;padding:11px}
     .stat b{display:block;font-size:18px}.stat span{display:block;color:var(--muted);font-size:10px;margin-top:2px}
 
-    .tools{position:sticky;top:0;z-index:5;padding:8px 0 10px;background:linear-gradient(180deg,rgba(8,17,31,.98),rgba(8,17,31,.88),rgba(8,17,31,0))}
+    .tools{padding:4px 0 10px}
     .searchbox{position:relative}
     .searchbox svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:19px;height:19px;color:#7f94ad}
     .searchbox input{
@@ -61,12 +61,11 @@
     .searchbox input:focus{border-color:#238ec1;box-shadow:0 0 0 3px rgba(41,182,246,.12)}
     .clear{position:absolute;right:8px;top:8px;width:36px;height:36px;border:0;border-radius:11px;background:transparent;color:#8ba0b9;font-size:20px;display:none}
     .clear.show{display:block}
-    .tabs{display:flex;gap:7px;margin-top:9px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
-    .tab{
-      flex:0 0 auto;border:1px solid var(--line);background:#0e1a2d;color:#9cafc5;border-radius:13px;
-      min-height:40px;padding:8px 14px;font-size:12px;font-weight:700;white-space:nowrap
-    }
-    .tab.active{background:linear-gradient(180deg,#123657,#102d49);border-color:#1e6693;color:#dff5ff;box-shadow:inset 0 0 0 1px rgba(56,189,248,.05)}
+    .service-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+    .service{min-height:74px;border:1px solid var(--line);background:#0e1a2d;color:#9cafc5;border-radius:16px;padding:9px 5px;font-size:10px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px}
+    .service.active{background:linear-gradient(180deg,#123657,#102d49);border-color:#1e6693;color:#dff5ff;box-shadow:inset 0 0 0 1px rgba(56,189,248,.06)}
+    .svc-ico{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(56,189,248,.11);color:#7dd3fc;font-size:15px;font-weight:900}
+    .service.active .svc-ico{background:rgba(56,189,248,.2);color:#e6f8ff}
 
     .sectionbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 2px 10px}
     .sectionbar strong{font-size:14px}.sectionbar span{font-size:12px;color:var(--muted)}
@@ -129,6 +128,7 @@
       opacity:0;pointer-events:none;transition:.22s;z-index:20;box-shadow:0 12px 30px rgba(0,0,0,.25)
     }
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:380px){.service-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media(min-width:700px){
       .shell{padding-top:24px}.list{grid-template-columns:1fr 1fr}.hero{padding:24px}.fab{right:max(24px,calc((100vw - 760px)/2 + 24px))}
       dialog{border-radius:24px;bottom:auto;top:50%;transform:translateY(-50%)}
@@ -144,10 +144,10 @@
         </div>
         <div>
           <div class="eyebrow">Blessing Store</div>
-          <h1>Master Data Pelanggan</h1>
+          <h1>Master Data Pelanggan Konter</h1>
         </div>
       </div>
-      <p class="hero-sub">Kelola data pelanggan yang berkaitan dengan listrik, BPJS, dan dompet digital langsung dari HP.</p>
+      <p class="hero-sub">Simpan nama dan nomor pelanggan berdasarkan jenis layanan. Cepat dicari, mudah disalin.</p>
       <div class="stats">
         <div class="stat"><b id="statAll">0</b><span>Total data</span></div>
         <div class="stat"><b id="statToken">0</b><span>Token</span></div>
@@ -161,13 +161,19 @@
         <input id="search" type="search" placeholder="Cari nama atau nomor..." autocomplete="off" />
         <button id="clearSearch" class="clear" aria-label="Hapus pencarian">×</button>
       </div>
-      <div class="tabs tabs-scroll" role="tablist">
-        <button class="tab active" data-cat="">Semua</button>
-        <button class="tab" data-cat="Listrik Bulanan">Bulanan</button>
-        <button class="tab" data-cat="Listrik Token">Token</button>
-        <button class="tab" data-cat="BPJS">BPJS</button>
-        <button class="tab" data-cat="DANA">DANA</button>
-        <button class="tab" data-cat="GoPay">GoPay</button>
+      <div class="service-grid" role="tablist" aria-label="Kategori layanan">
+        <button class="service active" data-cat=""><span class="svc-ico">▦</span><span>Semua</span></button>
+        <button class="service" data-cat="Pulsa"><span class="svc-ico">☎</span><span>Pulsa</span></button>
+        <button class="service" data-cat="Paket Data"><span class="svc-ico">◉</span><span>Paket Data</span></button>
+        <button class="service" data-cat="Listrik Token"><span class="svc-ico">⚡</span><span>Token PLN</span></button>
+        <button class="service" data-cat="Listrik Bulanan"><span class="svc-ico">▤</span><span>PLN Bulanan</span></button>
+        <button class="service" data-cat="BPJS"><span class="svc-ico">✚</span><span>BPJS</span></button>
+        <button class="service" data-cat="DANA"><span class="svc-ico">D</span><span>DANA</span></button>
+        <button class="service" data-cat="GoPay"><span class="svc-ico">G</span><span>GoPay</span></button>
+        <button class="service" data-cat="OVO"><span class="svc-ico">O</span><span>OVO</span></button>
+        <button class="service" data-cat="ShopeePay"><span class="svc-ico">S</span><span>ShopeePay</span></button>
+        <button class="service" data-cat="PDAM"><span class="svc-ico">💧</span><span>PDAM</span></button>
+        <button class="service" data-cat="IndiHome"><span class="svc-ico">⌂</span><span>IndiHome</span></button>
       </div>
     </section>
 
@@ -201,11 +207,17 @@
       <div class="field">
         <label>KATEGORI</label>
         <select id="editCategory">
-          <option>Listrik Bulanan</option>
+          <option>Pulsa</option>
+          <option>Paket Data</option>
           <option>Listrik Token</option>
+          <option>Listrik Bulanan</option>
           <option>BPJS</option>
           <option>DANA</option>
           <option>GoPay</option>
+          <option>OVO</option>
+          <option>ShopeePay</option>
+          <option>PDAM</option>
+          <option>IndiHome</option>
         </select>
       </div>
       <div class="field">
@@ -295,7 +307,7 @@ function render(){
 function openEditor(x=null){
   editingId=x?.id??null;
   $("editorTitle").textContent=x?"Edit Pelanggan":"Tambah Pelanggan";
-  editCategory.value=x?.category??"Listrik Bulanan";editName.value=x?.name??"";editNumber.value=x?.number??"";
+  editCategory.value=x?.category??"Pulsa";editName.value=x?.name??"";editNumber.value=x?.number??"";
   deleteBtn.classList.toggle("show",!!x);
   editor.showModal();setTimeout(()=>editName.focus(),80)
 }
@@ -319,9 +331,9 @@ $("cancelBtn").onclick=()=>editor.close();
 $("addBtn").onclick=()=>openEditor();
 $("clearSearch").onclick=()=>{search.value="";search.focus();render()};
 search.oninput=render;
-document.querySelectorAll(".tab").forEach(btn=>btn.onclick=()=>{
+document.querySelectorAll(".service").forEach(btn=>btn.onclick=()=>{
   activeCategory=btn.dataset.cat;
-  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===btn));
+  document.querySelectorAll(".service").forEach(x=>x.classList.toggle("active",x===btn));
   render()
 });
 render();
