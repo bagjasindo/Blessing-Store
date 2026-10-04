@@ -1,4 +1,4 @@
-const CACHE="blessing-data-v7";
+const CACHE="blessing-data-v8";
 const ASSETS=["./","./index.html","./manifest.webmanifest","./icon.svg","./logo-blessing.svg"];
 
 self.addEventListener("install",event=>{
