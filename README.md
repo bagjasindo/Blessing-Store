@@ -1,11 +1,15 @@
-# Blessing Store - Data Pelanggan
+# Blessing Store - Master Data Pelanggan
 
-Web app mobile-first untuk mencari dan menyalin nomor pelanggan listrik/token.
+Web app mobile-first untuk menyimpan, mencari, mengedit, menghapus, dan menyalin nomor/ID pelanggan berdasarkan kategori layanan.
+
+## Penyimpanan
+Data perubahan pengguna disimpan lokal di browser/perangkat menggunakan localStorage. Tidak ada sinkronisasi antar-HP.
 
 ## GitHub Pages
-Jika Pages belum aktif: buka **Settings → Pages → Build and deployment → Source: Deploy from a branch → Branch: main / (root) → Save**.
+Source: branch `main`, folder `/ (root)`.
 
-Alamat setelah aktif:
-https://bagjasindo.github.io/Blessing-Store-DataPelanggan/
+Alamat:
+https://bagjasindo.github.io/Blessing-Store/
 
-Catatan: perubahan lewat tombol Tambah/Edit/Hapus disimpan di browser HP (localStorage), jadi bersifat per perangkat.
+## PWA
+Aplikasi mendukung pemasangan ke layar utama dan cache offline dasar melalui service worker.
