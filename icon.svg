@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<rect width="512" height="512" rx="96" fill="#0f172a"/>
-<path d="M284 52 132 276h102l-18 184 164-252H274z" fill="#38bdf8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Blessing Store">
+  <rect width="512" height="512" rx="112" fill="#f8fcfb"/>
+  <g transform="translate(76 48) scale(1.08)" fill="none" stroke="#0f9c8f" stroke-width="24" stroke-linejoin="miter" stroke-linecap="square">
+    <path d="M166 18 286 86v206l-120 68L46 292V86z"/>
+    <path d="M46 86 166 18v206l120 68"/>
+    <path d="M46 224 106 190 286 292"/>
+    <path d="M106 190 166 224v136"/>
+  </g>
 </svg>
