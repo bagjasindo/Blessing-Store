@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 862 123" role="img" aria-labelledby="title">
+<title id="title">BLESSING STORE</title>
+<rect width="862" height="123" rx="0" fill="#ffffff"/>
+<g fill="#0f9c8f">
+  <text x="4" y="96" font-family="Arial,Helvetica,sans-serif" font-size="83" font-weight="800" letter-spacing="-4">BLE</text>
+  <text x="277" y="96" font-family="Arial,Helvetica,sans-serif" font-size="83" font-weight="800" letter-spacing="-4">SING</text>
+  <rect x="551" y="3" width="301" height="111" rx="10"/>
+</g>
+<g fill="none" stroke="#0f9c8f" stroke-width="8" stroke-linejoin="miter" stroke-linecap="square">
+  <path d="M243 15 271 32v63l-28 17-56-33V47z"/>
+  <path d="m187 47 56-32v63l28 17"/>
+  <path d="m187 79 28-16 56 32"/>
+  <path d="m215 63 28 16v33"/>
+</g>
+<text x="573" y="83" fill="#ffffff" font-family="Arial,Helvetica,sans-serif" font-size="57" font-weight="800" letter-spacing="1">STORE</text>
+</svg>
