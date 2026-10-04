@@ -251,7 +251,7 @@
   <main class="shell">
     <section class="hero home-only">
       <div class="brandline">
-        <img class="brand-logo" src="./logo-blessing.svg?v=12" alt="Blessing Store" />
+        <img class="brand-logo" src="./logo-blessing.svg?v=19" alt="Blessing Store" />
         <h1 class="brand-title">Master Data Pelanggan Konter</h1>
       </div>
       <p class="hero-sub">Simpan nama dan nomor pelanggan berdasarkan jenis layanan. Cepat dicari, mudah disalin.</p>
@@ -611,7 +611,7 @@ if("serviceWorker" in navigator){
     location.reload();
   });
   window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("./service-worker.js?v=18",{scope:"./"}).then(reg=>{
+    navigator.serviceWorker.register("./service-worker.js?v=19",{scope:"./"}).then(reg=>{
       reg.update().catch(()=>{});
       if(reg.waiting)reg.waiting.postMessage({type:"SKIP_WAITING"});
     }).catch(()=>{});
